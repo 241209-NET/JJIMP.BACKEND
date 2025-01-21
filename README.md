@@ -64,7 +64,7 @@ This is an open source project available in the 241209-Net github repository.
 
 ## GALLARY
 
-![ERD Project Management Ticketing System](https://dbdiagram.io/d/Copy-of-Ticket-Manager-678fb4b437f5d6cbeb7420ac)
+[ERD Project Management Ticketing System](https://dbdiagram.io/d/Copy-of-Ticket-Manager-678fb4b437f5d6cbeb7420ac)
 
 
 ## CREDITS
