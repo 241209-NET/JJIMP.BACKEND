@@ -56,8 +56,6 @@ Technologies
 - Github (Repository Management)
 - ASP.Net Core (MVC)
 - Sonar Static Analysis
-- React
-- Node.Js
   
 
 ## COMMUNITY
