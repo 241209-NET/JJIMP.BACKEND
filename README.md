@@ -43,7 +43,6 @@ Stretch Goals
 Technologies
 
 - C# (Programming Languge)
-- TypeScript/JavaScript(Programming Language)
 - SQL(Programming Languge)
 - Visual Studio (IDE)
 - .NETSDK (Development Kit)
