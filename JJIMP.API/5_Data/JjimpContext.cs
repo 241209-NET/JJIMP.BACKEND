@@ -52,8 +52,9 @@ public partial class JjimpContext : DbContext
             .HasMany(p => p.Users)
             .WithMany(u => u.Projects)
             .UsingEntity<UserProject>(
-                p => p.HasOne<User>().WithMany().HasForeignKey(up => up.UserId),
-                u => u.HasOne<Project>().WithMany().HasForeignKey(up => up.ProjectId)
+                p => p.HasOne<User>().WithMany().HasForeignKey(up => up.UserId)
+                    .OnDelete(DeleteBehavior.NoAction),
+                u => u.HasOne<Project>().WithMany().HasForeignKey(up => up.ProjectId).OnDelete(DeleteBehavior.NoAction)
             );
         // One-to-many relationship between Project and Issue
         builder.Entity<Project>()
@@ -81,13 +82,14 @@ public partial class JjimpContext : DbContext
         builder.Entity<Comment>()
             .HasOne(c => c.PostedBy)
             .WithMany(u => u.Comments)
-            .HasForeignKey(c => c.PostedById);
+            .HasForeignKey(c => c.PostedById)
+            .OnDelete(DeleteBehavior.NoAction);
         // One-to-many relationship between User and Project
         builder.Entity<Project>()
             .HasOne(p => p.ProjectManager)
             .WithMany(u => u.ManagedProjects)
             .HasForeignKey(p => p.ProjectManagerId);
-
+        
         // Value conversions
         builder.Entity<Issue>()
             .Property(i => i.Status)
