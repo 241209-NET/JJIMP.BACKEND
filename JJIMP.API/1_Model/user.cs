@@ -6,7 +6,7 @@ namespace JJIMP.API.Model;
 public class User
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id;
+    public int id;
     public string name;
     public string? email;
     public string? password;

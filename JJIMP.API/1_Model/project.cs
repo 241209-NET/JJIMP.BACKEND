@@ -6,7 +6,7 @@ namespace JJIMP.API.Model;
 public class Project
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int ID;
+    public int id;
     public required string name;
     public string? description;
     public JsonContent? labels;

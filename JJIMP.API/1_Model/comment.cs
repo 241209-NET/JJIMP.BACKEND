@@ -6,7 +6,7 @@ namespace JJIMP.API.Model;
 public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id;
+    public int id;
     public required string content;
     [Timestamp]
     public DateTime? createdAt;

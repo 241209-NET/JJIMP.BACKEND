@@ -11,7 +11,7 @@ public enum StatusEnum
 public class Issue
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id;
+    public int id;
     public required string title;
     public string? description;
     public JsonContent? labels;
