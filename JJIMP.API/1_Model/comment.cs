@@ -6,15 +6,16 @@ namespace JJIMP.API.Model;
 public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int id;
-    public required string content;
+    public int Id { get; set; }
+    public required string Content { get; set; }
+    // Relations
+    public int PostedById { get; set; }
+    public User PostedBy { get; set; } = null!;
+    public int IssueId { get; set; }
+    public Issue Issue { get; set; } = null!;
+    // Metadata
     [Timestamp]
-    public DateTime? createdAt;
+    public DateTime CreatedAt { get; set; }
     [Timestamp]
-    public DateTime? updatedAt;
-    [ForeignKey("User")]
-    public int? postedBy;
-    [ForeignKey("Issue")]
-    public int? issueID;
-
+    public DateTime UpdatedAt { get; set; }
 }

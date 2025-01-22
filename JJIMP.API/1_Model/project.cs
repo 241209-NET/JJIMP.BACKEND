@@ -6,16 +6,17 @@ namespace JJIMP.API.Model;
 public class Project
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int id;
-    public required string name;
-    public string? description;
-    public JsonContent? labels;
-
-    [ForeignKey("User")]
-    public int? userId;
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public string? Description { get; set; }
+    // Relations
+    public int ProjectManagerId { get; set; }
+    public User ProjectManager { get; set; } = null!;
+    public List<User> Users { get; set; } = [];
+    public List<Issue> Issues { get; set; } = [];
+    // Metadata
     [Timestamp]
-    public DateTime? createdAt;
+    public DateTime CreatedAt { get; set; }
     [Timestamp]
-    public DateTime? updatedAt;
-
+    public DateTime UpdatedAt { get; set; }
 }
