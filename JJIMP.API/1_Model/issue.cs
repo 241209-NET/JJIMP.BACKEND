@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JJIMP.API.Model;
 
-public enum StatusEnum {
+public enum StatusEnum
+{
 
 }
 
@@ -11,12 +12,14 @@ public class Issue
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id;
-    public string title;
+    public required string title;
     public string? description;
     public JsonContent? labels;
     public StatusEnum? status;
-    public DateTime? deadline;
+    public DateOnly? deadline;
+    [Timestamp]
     public DateTime? createdAt;
+    [Timestamp]
     public DateTime? updatedAt;
     [ForeignKey("User")]
     public int? assignee;

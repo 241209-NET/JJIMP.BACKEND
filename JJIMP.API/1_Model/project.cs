@@ -7,13 +7,15 @@ public class Project
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int ID;
-    public string name;
+    public required string name;
     public string? description;
     public JsonContent? labels;
 
     [ForeignKey("User")]
     public int? userId;
+    [Timestamp]
     public DateTime? createdAt;
+    [Timestamp]
     public DateTime? updatedAt;
 
 }

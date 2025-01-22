@@ -7,8 +7,10 @@ public class Comment
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id;
-    public string content;
+    public required string content;
+    [Timestamp]
     public DateTime? createdAt;
+    [Timestamp]
     public DateTime? updatedAt;
     [ForeignKey("User")]
     public int? postedBy;

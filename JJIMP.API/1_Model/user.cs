@@ -10,7 +10,4 @@ public class User
     public string name;
     public string? email;
     public string? password;
-    public DateTime? lastActivity;
-    public DateTime? createdAt;
-    public DateTime? updatedAt;
 }
