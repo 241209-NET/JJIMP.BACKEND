@@ -27,7 +27,8 @@ public class CommentRepository : ICommentRepository
     {
         await _dbContext.Comments.AddAsync(comment);
         await _dbContext.SaveChangesAsync();
-        return comment;
+        var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
+        return createdComment!;
     }
 
     public async Task<Comment> UpdateComment(Comment comment)

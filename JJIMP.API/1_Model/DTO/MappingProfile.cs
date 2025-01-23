@@ -13,7 +13,8 @@ public class MappingProfile : Profile
         CreateMap<Project, ProjectOutDTO>().ReverseMap();
         CreateMap<Issue, IssueInDTO>().ReverseMap();
         CreateMap<Issue, IssueOutDTO>().ReverseMap();
-        CreateMap<Comment, CommentInDTO>().ReverseMap();
+        CreateMap<Comment, CreateCommentDTO>().ReverseMap();
+        CreateMap<Comment, UpdateCommentDTO>().ReverseMap();
         CreateMap<Comment, CommentOutDTO>().ReverseMap();
     }
 }
