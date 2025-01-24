@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using JJIMP.API.Model;
 
 namespace JJIMP.API.DTO;
 

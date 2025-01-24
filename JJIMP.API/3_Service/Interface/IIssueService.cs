@@ -1,9 +1,12 @@
 using JJIMP.API.DTO;
-using JJIMP.API.Model;
 
 namespace JJIMP.API.Service;
 
 public interface IIssueService
 {
-
+    Task<IEnumerable<IssueOutDTO>> GetIssuesByIssueId(int issueId);
+    Task<IssueOutDTO> GetIssueById(int id);
+    Task<IssueOutDTO> CreateIssue(CreateIssueDTO issueDTO);
+    Task<IssueOutDTO> UpdateIssue(UpdateIssueDTO issueDTO);
+    Task<IssueOutDTO> DeleteIssue(int id);
 }
