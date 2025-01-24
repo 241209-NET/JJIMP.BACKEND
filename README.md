@@ -13,7 +13,7 @@ This project is a simple project management ticketing system designed to help us
 ## USAGE
 
 1. Navigate to the `JJIMP.API` directory
-2. Run `docker build -t jjimp.api -f Dockerfile .`
+2. Run `docker compose build`
 3. Run `docker compose up`
 
 ## MVP
