@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Data;
+using JJIMP.API.Service;
+using JJIMP.API.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +16,13 @@ builder.Services.AddSwaggerGen();
 
 // Dependency Inject Services
 // builder.Services.AddScoped<IService, Service>();
+builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IIssueService, IssueService>();
 
 // Dependency Inject Repositories
 // builder.Services.AddScoped<IRepository, Repository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 
 // Add Controllers
 builder.Services.AddControllers()
