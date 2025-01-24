@@ -1,0 +1,16 @@
+version: "3.4"
+
+services:
+  backend:
+    image: jjimp.api
+    build:
+      context: .
+      target: development
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:8080'
+    volumes:
+      - $APPDATA/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro

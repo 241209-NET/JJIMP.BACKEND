@@ -5,8 +5,6 @@ Project Management Ticketing System:
 This project is a simple project management ticketing system designed to help users track tasks efficiently. Users can create projects, add issues, assign tasks, and leave comments to facilitate collaboration. The system provides basic status tracking and metadata for better organization. It's ideal for small teams or individuals looking for a streamlined task management solution.
 
 
-
-
 ## PROJECT NAME
 
 **Project Management Ticketing System**
@@ -14,7 +12,13 @@ This project is a simple project management ticketing system designed to help us
 
 ## USAGE
 
-This is an team project to present to colleagues in training.
+1. Navigate to the `JJIMP.API` directory
+2. Run `docker build -t jjimp.api -f Dockerfile .`
+3. Run `docker compose up`
+
+## MVP
+
+This is a team project to present to colleagues in training.
 
 MVP Goals
 - feature(Authentication)
@@ -37,8 +41,6 @@ Stretch Goals
 - feature(File Attachments)
 
 ## DEVELOPMENT
-
-
 
 Technologies
 
