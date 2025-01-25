@@ -4,6 +4,7 @@ using JJIMP.API.Repository;
 using JJIMP.API.Service;
 using Moq;
 using AutoMapper;
+using AutoFixture;
 
 namespace JJIMP.Test;
 
