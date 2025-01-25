@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Data;
 using JJIMP.API.Service;
 using JJIMP.API.Repository;
+using JJIMP.API.DTO;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services.AddScoped<IIssueService, IssueService>();
 // builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
+
+// Add AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add Controllers
 builder.Services.AddControllers()
