@@ -7,7 +7,8 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, UserInDTO>().ReverseMap();
+        CreateMap<User, CreateUserDTO>().ReverseMap();
+        CreateMap<User, UpdateUserDTO>().ReverseMap();
         CreateMap<User, UserOutDTO>().ReverseMap();
         CreateMap<Project, ProjectInDTO>().ReverseMap();
         CreateMap<Project, ProjectOutDTO>().ReverseMap();

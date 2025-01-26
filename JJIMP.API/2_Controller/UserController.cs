@@ -23,14 +23,14 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult> CreateUser(UserInDTO userDTO)
+    public async Task<ActionResult> CreateUser(CreateUserDTO userDTO)
     {
         var user = await _userService.CreateUser(userDTO);
         return Ok(user);
     }
 
     [HttpPut]
-    public async Task<ActionResult> UpdateUser(UserInDTO userDTO)
+    public async Task<ActionResult> UpdateUser(UpdateUserDTO userDTO)
     {
         var user = await _userService.UpdateUser(userDTO);
         return Ok(user);

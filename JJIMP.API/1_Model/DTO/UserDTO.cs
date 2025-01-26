@@ -2,7 +2,16 @@ using System.ComponentModel.DataAnnotations;
 
 namespace JJIMP.API.DTO;
 
-public class UserInDTO
+public class CreateUserDTO
+{
+    [Required]
+    public required string Name { get; set; }
+    [Required]
+    public required string Email { get; set; }
+    [Required]
+    public required string Password { get; set; }
+}
+public class UpdateUserDTO
 {
     [Required]
     public required int Id { get; set; }

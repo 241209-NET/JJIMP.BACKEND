@@ -26,13 +26,13 @@ public class UserService : IUserService
         var users = await _userRepository.GetAllUsers();
         return _mapper.Map<IEnumerable<UserOutDTO>>(users);
     }
-    public async Task<UserOutDTO> CreateUser(UserInDTO userDTO)
+    public async Task<UserOutDTO> CreateUser(CreateUserDTO userDTO)
     {
         var user = _mapper.Map<User>(userDTO);
         var createdUser = await _userRepository.CreateUser(user);
         return _mapper.Map<UserOutDTO>(createdUser);
     }
-    public async Task<UserOutDTO?> UpdateUser(UserInDTO userDTO)
+    public async Task<UserOutDTO?> UpdateUser(UpdateUserDTO userDTO)
     {
         var userToUpdate = await _userRepository.GetUserById(userDTO.Id) ?? throw new ArgumentException("User not found");
         userToUpdate.Name = userDTO.Name;
