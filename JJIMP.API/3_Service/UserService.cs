@@ -38,6 +38,11 @@ public class UserService : IUserService
         userToUpdate.Name = userDTO.Name;
         userToUpdate.Email = userDTO.Email;
         userToUpdate.Password = userDTO.Password;
+        userToUpdate.Projects = userDTO.Projects;
+        userToUpdate.CreatedIssues = userDTO.CreatedIssues;
+        userToUpdate.AssignedIssues = userDTO.AssignedIssues;
+        userToUpdate.Comments = userDTO.Comments;
+        userToUpdate.ManagedProjects = userDTO.ManagedProjects;
         var updatedUser = await _userRepository.UpdateUser(userToUpdate);
         return _mapper.Map<UserOutDTO?>(updatedUser);
 

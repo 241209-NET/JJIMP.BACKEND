@@ -21,6 +21,12 @@ public class UserController : ControllerBase
         var user = await _userService.GetUserById(id);
         return Ok(user);
     }
+    [HttpGet]
+    public async Task<ActionResult> GetAllUsers()
+    {
+        var user = await _userService.GetAllUsers();
+        return Ok(user);
+    }
 
     [HttpPost]
     public async Task<ActionResult> CreateUser(CreateUserDTO userDTO)
