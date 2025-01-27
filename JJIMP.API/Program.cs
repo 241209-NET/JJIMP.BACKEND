@@ -19,11 +19,15 @@ builder.Services.AddSwaggerGen();
 // builder.Services.AddScoped<IService, Service>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IIssueService, IssueService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 // Dependency Inject Repositories
 // builder.Services.AddScoped<IRepository, Repository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
