@@ -28,21 +28,30 @@ public class ProjectService : IProjectService
         return _mapper.Map<ProjectOutDTO>(project);
     }
 
-    public async Task<ProjectOutDTO> CreateProject(ProjectInDTO projectDTO)
+    public async Task<ProjectOutDTO> CreateProject(CreateProjectDTO projectDTO)
     {
         var project = _mapper.Map<Project>(projectDTO);
         var createdProject = await _projectRepository.CreateProject(project);
         return _mapper.Map<ProjectOutDTO>(createdProject);
     }
 
-    public async Task<ProjectOutDTO> UpdateProject(ProjectInDTO projectDTO)
+    public async Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDTO)
     {
-        if (!projectDTO.Id.HasValue)
-        {
-            throw new ArgumentException("Project ID is required");
-        }
-        var projectToUpdate = await _projectRepository.GetProjectById(projectDTO.Id.Value) ?? throw new ArgumentException("Project not found");
+        var projectToUpdate = await _projectRepository.GetProjectById(projectDTO.Id) ?? throw new ArgumentException("Project not found");
         _mapper.Map(projectDTO, projectToUpdate);
+        // Assign the new values to the projectToUpdate
+        if (projectDTO.Name != null)
+        {
+            projectToUpdate.Name = projectDTO.Name;
+        }
+        if (projectDTO.Description != null)
+        {
+            projectToUpdate.Description = projectDTO.Description;
+        }
+        if (projectDTO.ProjectManagerId != null)
+        {
+            projectToUpdate.ProjectManagerId = (int)projectDTO.ProjectManagerId;
+        }
         var updatedProject = await _projectRepository.UpdateProject(projectToUpdate);
         return _mapper.Map<ProjectOutDTO>(updatedProject);
     }

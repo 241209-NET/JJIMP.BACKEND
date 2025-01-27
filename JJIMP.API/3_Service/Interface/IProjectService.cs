@@ -7,7 +7,7 @@ public interface IProjectService
 {
     Task<IEnumerable<ProjectOutDTO>> GetAllProjects();
     Task<ProjectOutDTO> GetProjectById(int projectId);
-    Task<ProjectOutDTO> CreateProject(ProjectInDTO projectDto);
-    Task<ProjectOutDTO> UpdateProject(ProjectInDTO projectDto);
+    Task<ProjectOutDTO> CreateProject(CreateProjectDTO projectDto);
+    Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDto);
     Task<ProjectOutDTO> DeleteProject(int projectId);
 }

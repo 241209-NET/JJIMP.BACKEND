@@ -33,7 +33,7 @@ public class ProjectController : ControllerBase
 
     // POST: api/Project
     [HttpPost]
-    public async Task<IActionResult> CreateProject(ProjectInDTO projectDto)
+    public async Task<IActionResult> CreateProject(CreateProjectDTO projectDto)
     {
         var createdProject = await _projectService.CreateProject(projectDto);
         return Ok(createdProject);
@@ -41,7 +41,7 @@ public class ProjectController : ControllerBase
 
     // PUT: api/Project
     [HttpPut]
-    public async Task<IActionResult> UpdateProject(ProjectInDTO projectDto)
+    public async Task<IActionResult> UpdateProject(UpdateProjectDTO projectDto)
     {
         var updatedProject = await _projectService.UpdateProject(projectDto);
         return Ok(updatedProject);
