@@ -5,5 +5,9 @@ namespace JJIMP.API.Service;
 
 public interface IProjectService
 {
-
+    Task<IEnumerable<ProjectOutDTO>> GetAllProjects();
+    Task<ProjectOutDTO> GetProjectById(int projectId);
+    Task<ProjectOutDTO> CreateProject(CreateProjectDTO projectDto);
+    Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDto);
+    Task<ProjectOutDTO> DeleteProject(int projectId);
 }
