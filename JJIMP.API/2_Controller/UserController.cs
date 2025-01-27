@@ -9,22 +9,40 @@ namespace JJIMP.API.Controller;
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IProjectService _projectService;
 
-    public UserController(IUserService userService)
+    public UserController(IUserService userService, IProjectService projectService)
     {
         _userService = userService;
+        _projectService = projectService;
     }
+
     
     [HttpGet("{id}")]
     public async Task<ActionResult> GetUser(int id)
     {
+        var user = await _projectService.GetProjectsByUserId(id);
+        return Ok(user);
+    }
+
+    [HttpGet("{id}/projects")]
+    public async Task<ActionResult> GetUserProjects(int id)
+    {
         var user = await _userService.GetUserById(id);
         return Ok(user);
     }
+
     [HttpGet]
     public async Task<ActionResult> GetAllUsers()
     {
         var user = await _userService.GetAllUsers();
+        return Ok(user);
+    }
+
+    [HttpGet("{id}/info")]
+    public async Task<ActionResult> GetUserInfo(int id)
+    {
+        var user = await _userService.GetUserInfoById(id);
         return Ok(user);
     }
 
