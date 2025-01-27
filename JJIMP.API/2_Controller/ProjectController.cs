@@ -9,18 +9,29 @@ namespace JJIMP.API.Controller;
 public class ProjectController : ControllerBase
 {
     private readonly IProjectService _projectService;
+    private readonly IIssueService _issueService;
+    private readonly IUserService _userService;
 
-    public ProjectController(IProjectService projectService)
+    public ProjectController(IProjectService projectService, IIssueService issueService, IUserService userService)
     {
         _projectService = projectService;
+        _issueService = issueService;
+        _userService = userService;
+    }
+
+    [HttpGet("{id}/users")]
+    public async Task<IActionResult> GetProjectUsers(int id)
+    {
+        var issues = await _userService.GetUsersByProjectId(id);
+        return Ok(issues);
     }
 
     // GET: api/Project
-    [HttpGet]
-    public async Task<IActionResult> GetAllProjects()
+    [HttpGet("{id}/issues")]
+    public async Task<IActionResult> GetProjectIssues(int id)
     {
-        var projects = await _projectService.GetAllProjects();
-        return Ok(projects);
+        var issues = await _issueService.GetIssuesByProjectId(id);
+        return Ok(issues);
     }
 
     // GET: api/Project/5
@@ -53,5 +64,19 @@ public class ProjectController : ControllerBase
     {
         var deletedProject = await _projectService.DeleteProject(id);
         return Ok(deletedProject);
+    }
+
+    [HttpPost("{id}/users/{userId}")]
+    public async Task<IActionResult> AddUserToProject(int id, int userId)
+    {
+        var project = await _projectService.AddUserToProject(id, userId);
+        return Ok(project);
+    }
+
+    [HttpDelete("{id}/users/{userId}")]
+    public async Task<IActionResult> RemoveUserFromProject(int id, int userId)
+    {
+        var project = await _projectService.RemoveUserFromProject(id, userId);
+        return Ok(project);
     }
 }

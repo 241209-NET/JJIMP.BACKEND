@@ -15,17 +15,30 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<UserInfoOutDTO>> GetUsersByProjectId(int projectId)
+    {
+        var users = await _userRepository.GetUsersByProjectId(projectId);
+        return _mapper.Map<IEnumerable<UserInfoOutDTO>>(users);
+    }
+
     public async Task<UserOutDTO?> GetUserById(int userId)
     {
-        var user = await _userRepository.GetUserById(userId) ?? throw new ArgumentException("User not found");;
+        var user = await _userRepository.GetUserById(userId) ?? throw new ArgumentException("User not found");
         return _mapper.Map<UserOutDTO?>(user);
     }
 
-    public async Task<IEnumerable<UserOutDTO>> GetAllUsers()
+    public async Task<IEnumerable<UserInfoOutDTO>> GetAllUsers()
     {
         var users = await _userRepository.GetAllUsers();
-        return _mapper.Map<IEnumerable<UserOutDTO>>(users);
+        return _mapper.Map<IEnumerable<UserInfoOutDTO>>(users);
     }
+
+    public async Task<UserInfoOutDTO?> GetUserInfoById(int userId)
+    {
+        var user = await _userRepository.GetUserInfoById(userId) ?? throw new ArgumentException("User not found");
+        return _mapper.Map<UserInfoOutDTO?>(user);
+    }
+
     public async Task<UserOutDTO> CreateUser(CreateUserDTO userDTO)
     {
         var user = _mapper.Map<User>(userDTO);

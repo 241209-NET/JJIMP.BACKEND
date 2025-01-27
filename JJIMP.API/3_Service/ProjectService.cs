@@ -16,9 +16,9 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ProjectOutDTO>> GetAllProjects()
+    public async Task<IEnumerable<ProjectOutDTO>> GetProjectsByUserId(int userId)
     {
-        var projects = await _projectRepository.GetAllProjects();
+        var projects = await _projectRepository.GetProjectsByUserId(userId);
         return _mapper.Map<IEnumerable<ProjectOutDTO>>(projects);
     }
 
@@ -60,5 +60,17 @@ public class ProjectService : IProjectService
     {
         var deletedProject = await _projectRepository.DeleteProject(projectId);
         return _mapper.Map<ProjectOutDTO>(deletedProject);
+    }
+
+    public async Task<ProjectOutDTO> AddUserToProject(int projectId, int userId)
+    {
+        var project = await _projectRepository.AddUserToProject(projectId, userId);
+        return _mapper.Map<ProjectOutDTO>(project);
+    }
+
+    public async Task<ProjectOutDTO> RemoveUserFromProject(int projectId, int userId)
+    {
+        var project = await _projectRepository.RemoveUserFromProject(projectId, userId);
+        return _mapper.Map<ProjectOutDTO>(project);
     }
 }
