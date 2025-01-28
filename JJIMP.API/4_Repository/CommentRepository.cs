@@ -39,6 +39,8 @@ public class CommentRepository : ICommentRepository
     {
         try 
         {
+            comment.CreatedAt = DateTime.Now;
+            comment.UpdatedAt = DateTime.Now;
             await _dbContext.Comments.AddAsync(comment);
             await _dbContext.SaveChangesAsync();
             var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
@@ -62,6 +64,7 @@ public class CommentRepository : ICommentRepository
         {
             comment.Content = commentToUpdate.Content;
         }
+        comment.UpdatedAt = DateTime.Now;
 
         var updatedComment = _dbContext.Comments.Update(comment);
         await _dbContext.SaveChangesAsync();

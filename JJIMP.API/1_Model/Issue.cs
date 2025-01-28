@@ -27,8 +27,6 @@ public class Issue
     public Project Project { get; set; } = null!;
     public List<Comment> Comments { get; set; } = [];
     // Metadata
-    [Timestamp]
     public DateTime CreatedAt { get; set; }
-    [Timestamp]
     public DateTime UpdatedAt { get; set; }
 }

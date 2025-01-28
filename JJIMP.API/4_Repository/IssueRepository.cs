@@ -50,6 +50,7 @@ public class IssueRepository : IIssueRepository
     {
         try
         {
+            issue.CreatedAt = DateTime.Now;
             await _dbContext.Issues.AddAsync(issue);
             await _dbContext.SaveChangesAsync();
             return issue;
@@ -69,20 +70,21 @@ public class IssueRepository : IIssueRepository
         }
         if (issueToUpdate.Title != null)
         {
-            issueToUpdate.Title = issueToUpdate.Title;
+            issue.Title = issueToUpdate.Title;
         }
         if (issueToUpdate.Description != null)
         {
-            issueToUpdate.Description = issueToUpdate.Description;
+            issue.Description = issueToUpdate.Description;
         }
         if (issueToUpdate.Deadline != null)
         {
-            issueToUpdate.Deadline = issueToUpdate.Deadline;
+            issue.Deadline = issueToUpdate.Deadline;
         }
         if (issueToUpdate.AssigneeId != null)
         {
-            issueToUpdate.AssigneeId = issueToUpdate.AssigneeId;
+            issue.AssigneeId = issueToUpdate.AssigneeId;
         }
+        issue.UpdatedAt = DateTime.Now;
         var updatedIssue = _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
         return updatedIssue.Entity;
