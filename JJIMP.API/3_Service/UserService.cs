@@ -20,6 +20,11 @@ public class UserService : IUserService
         var user = await _userRepository.GetUserById(userId) ?? throw new ArgumentException("User not found");
         return _mapper.Map<UserOutDTO?>(user);
     }
+    public async Task<UserOutDTO?> GetUserByName(string userName)
+    {
+        var user = await _userRepository.GetUserByName(userName) ?? throw new ArgumentException("User not found");;
+        return _mapper.Map<UserOutDTO?>(user);
+    }
 
     public async Task<IEnumerable<UserOutDTO>> GetAllUsers()
     {
@@ -30,6 +35,7 @@ public class UserService : IUserService
     public async Task<UserOutDTO> CreateUser(CreateUserDTO userDTO)
     {
         var user = _mapper.Map<User>(userDTO);
+        user.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
         var createdUser = await _userRepository.CreateUser(user);
         return _mapper.Map<UserOutDTO>(createdUser);
     }
@@ -37,6 +43,7 @@ public class UserService : IUserService
     public async Task<UserOutDTO?> UpdateUser(UpdateUserDTO userDTO)
     {
         var userToUpdate = _mapper.Map<User>(userDTO);
+        userToUpdate.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
         var updatedUser = await _userRepository.UpdateUser(userToUpdate) ?? throw new ArgumentException("User not found");
         return _mapper.Map<UserOutDTO>(updatedUser);
     }

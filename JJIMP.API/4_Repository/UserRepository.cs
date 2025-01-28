@@ -28,7 +28,15 @@ public class UserRepository : IUserRepository
             })
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
-
+    public async Task<User?> GetUserByName(string userName)
+    {
+        return await _dbContext.Users.Include(u => u.CreatedIssues)
+            .Include(u => u.AssignedIssues)
+            .Include(u => u.Comments)
+            .Include(u => u.Projects)
+            .Include(u => u.ManagedProjects)
+            .FirstOrDefaultAsync(u => u.Name == userName);
+    }
     public async Task<IEnumerable<User>> GetAllUsers()
     {
         return await _dbContext.Users.ToListAsync();
