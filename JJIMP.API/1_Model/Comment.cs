@@ -14,8 +14,6 @@ public class Comment
     public int IssueId { get; set; }
     public Issue Issue { get; set; } = null!;
     // Metadata
-    [Timestamp]
     public DateTime CreatedAt { get; set; }
-    [Timestamp]
     public DateTime UpdatedAt { get; set; }
 }

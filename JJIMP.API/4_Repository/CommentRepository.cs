@@ -13,29 +13,62 @@ public class CommentRepository : ICommentRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Comment>> GetCommentsByIssueId(int issueId)
-    {
-        return await _dbContext.Comments.Where(c => c.IssueId == issueId).ToListAsync();
-    }
-
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        return await _dbContext.Comments.FindAsync(commentId);
+        return await _dbContext.Comments
+            .Select(c => new Comment
+            {
+                Id = c.Id,
+                Content = c.Content,
+                PostedById = c.PostedById,
+                PostedBy = new User
+                {
+                    Id = c.PostedBy.Id,
+                    Name = c.PostedBy.Name,
+                    Email = c.PostedBy.Email,
+                    Password = null!,
+                },
+                IssueId = c.IssueId,
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt,
+            })
+            .FirstOrDefaultAsync(c => c.Id == commentId);
     }
 
     public async Task<Comment> CreateComment(Comment comment)
     {
-        await _dbContext.Comments.AddAsync(comment);
-        await _dbContext.SaveChangesAsync();
-        var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
-        return createdComment!;
+        try 
+        {
+            comment.CreatedAt = DateTime.Now;
+            comment.UpdatedAt = DateTime.Now;
+            await _dbContext.Comments.AddAsync(comment);
+            await _dbContext.SaveChangesAsync();
+            var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
+            return createdComment!;
+        }
+        catch (Exception)
+        {
+            return null!;
+        }
     }
 
-    public async Task<Comment> UpdateComment(Comment comment)
+    public async Task<Comment?> UpdateComment(Comment commentToUpdate)
     {
-        _dbContext.Comments.Update(comment);
+        var comment = await _dbContext.Comments.FindAsync(commentToUpdate.Id);
+        if (comment == null)
+        {
+            return null;
+        }
+
+        if (commentToUpdate.Content != null)
+        {
+            comment.Content = commentToUpdate.Content;
+        }
+        comment.UpdatedAt = DateTime.Now;
+
+        var updatedComment = _dbContext.Comments.Update(comment);
         await _dbContext.SaveChangesAsync();
-        return comment;
+        return updatedComment.Entity;
     }
 
     public async Task<Comment?> DeleteComment(int commentId)

@@ -16,30 +16,22 @@ public class CommentService : ICommentService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<CommentOutDTO>> GetCommentsByIssueId(int issueId)
-    {
-        var comments = await _commentRepository.GetCommentsByIssueId(issueId);
-        return _mapper.Map<IEnumerable<CommentOutDTO>>(comments);
-    }
-
     public async Task<CommentOutDTO> GetCommentById(int commentId)
     {
-        var comment = await _commentRepository.GetCommentById(commentId);
+        var comment = await _commentRepository.GetCommentById(commentId) ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(comment);
     }
     public async Task<CommentOutDTO> CreateComment(CreateCommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
-        var createdComment = await _commentRepository.CreateComment(comment);
+        var createdComment = await _commentRepository.CreateComment(comment) ?? throw new ArgumentException("Comment not created");
         return _mapper.Map<CommentOutDTO>(createdComment);
     }
 
     public async Task<CommentOutDTO> UpdateComment(UpdateCommentDTO commentDTO)
     {
-        var comment = _mapper.Map<Comment>(commentDTO);
-        var commentToUpdate = await _commentRepository.GetCommentById(comment.Id) ?? throw new ArgumentException("Comment not found");
-        commentToUpdate.Content = comment.Content;
-        var updatedComment = await _commentRepository.UpdateComment(commentToUpdate);
+        var commentToUpdate = _mapper.Map<Comment>(commentDTO);
+        var updatedComment = await _commentRepository.UpdateComment(commentToUpdate) ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(updatedComment);
     }
 
