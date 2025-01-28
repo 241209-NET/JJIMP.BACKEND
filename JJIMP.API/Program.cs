@@ -46,14 +46,19 @@ builder.Services.AddControllers()
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
-    {
-        policy.WithOrigins("http://localhost:5173")
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials(); // allow credential
-    });
-
+    options.AddPolicy(
+        "AllowAll",
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:5173"
+                ) // specify your React dev origin
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); // allow credentials
+        }
+    );
 });
 
 //Add Service for Jwt Bearer Auth
