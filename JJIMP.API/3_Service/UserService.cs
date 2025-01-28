@@ -15,10 +15,10 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<UserInfoOutDTO>> GetUsersByProjectId(int projectId)
+    public async Task<IEnumerable<UserOutDTO>> GetUsersByProjectId(int projectId)
     {
         var users = await _userRepository.GetUsersByProjectId(projectId);
-        return _mapper.Map<IEnumerable<UserInfoOutDTO>>(users);
+        return _mapper.Map<IEnumerable<UserOutDTO>>(users);
     }
 
     public async Task<UserOutDTO?> GetUserById(int userId)
@@ -27,16 +27,10 @@ public class UserService : IUserService
         return _mapper.Map<UserOutDTO?>(user);
     }
 
-    public async Task<IEnumerable<UserInfoOutDTO>> GetAllUsers()
+    public async Task<IEnumerable<UserOutDTO>> GetAllUsers()
     {
         var users = await _userRepository.GetAllUsers();
-        return _mapper.Map<IEnumerable<UserInfoOutDTO>>(users);
-    }
-
-    public async Task<UserInfoOutDTO?> GetUserInfoById(int userId)
-    {
-        var user = await _userRepository.GetUserInfoById(userId) ?? throw new ArgumentException("User not found");
-        return _mapper.Map<UserInfoOutDTO?>(user);
+        return _mapper.Map<IEnumerable<UserOutDTO>>(users);
     }
 
     public async Task<UserOutDTO> CreateUser(CreateUserDTO userDTO)
@@ -48,14 +42,18 @@ public class UserService : IUserService
     public async Task<UserOutDTO?> UpdateUser(UpdateUserDTO userDTO)
     {
         var userToUpdate = await _userRepository.GetUserById(userDTO.Id) ?? throw new ArgumentException("User not found");
-        userToUpdate.Name = userDTO.Name;
-        userToUpdate.Email = userDTO.Email;
-        userToUpdate.Password = userDTO.Password;
-        userToUpdate.Projects = userDTO.Projects;
-        userToUpdate.CreatedIssues = userDTO.CreatedIssues;
-        userToUpdate.AssignedIssues = userDTO.AssignedIssues;
-        userToUpdate.Comments = userDTO.Comments;
-        userToUpdate.ManagedProjects = userDTO.ManagedProjects;
+        if (userDTO.Name != null)
+        {
+            userToUpdate.Name = userDTO.Name;
+        }
+        if (userDTO.Email != null)
+        {
+            userToUpdate.Email = userDTO.Email;
+        }
+        if (userDTO.Password != null)
+        {
+            userToUpdate.Password = userDTO.Password;
+        }
         var updatedUser = await _userRepository.UpdateUser(userToUpdate);
         return _mapper.Map<UserOutDTO?>(updatedUser);
 

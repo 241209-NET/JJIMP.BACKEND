@@ -30,11 +30,6 @@ public class UserRepository : IUserRepository
         return await _dbContext.Users.ToListAsync();
     }
 
-    public async Task<User?> GetUserInfoById(int userId)
-    {
-        return await _dbContext.Users.FindAsync(userId);
-    }
-
     public async Task<User> CreateUser(User user)
     {
         await _dbContext.Users.AddAsync(user);
