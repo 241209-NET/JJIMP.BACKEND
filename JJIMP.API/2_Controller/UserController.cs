@@ -111,7 +111,7 @@ public class UserController : ControllerBase
             return NotFound("User not found.");
 
         // 2) verify password
-        if (user.Password != userDto.Password)
+        if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.Password))
         {
             return Unauthorized("Invalid credentials.");
         }
