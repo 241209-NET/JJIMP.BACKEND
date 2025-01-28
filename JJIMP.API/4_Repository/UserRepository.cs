@@ -43,7 +43,6 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> UpdateUser(User user)
     {
-        _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
         return user;
     }

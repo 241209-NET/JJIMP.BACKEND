@@ -62,7 +62,6 @@ public class IssueRepository : IIssueRepository
 
     public async Task<Issue> UpdateIssue(Issue issue)
     {
-        _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
         return issue;
     }

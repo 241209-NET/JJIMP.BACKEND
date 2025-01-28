@@ -52,7 +52,6 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> UpdateComment(Comment comment)
     {
-        _dbContext.Comments.Update(comment);
         await _dbContext.SaveChangesAsync();
         return comment;
     }
