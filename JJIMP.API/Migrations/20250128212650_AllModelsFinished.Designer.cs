@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JJIMP_Ticketing.Migrations
 {
     [DbContext(typeof(JjimpContext))]
-    [Migration("20250128175341_Init")]
-    partial class Init
+    [Migration("20250128212650_AllModelsFinished")]
+    partial class AllModelsFinished
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
