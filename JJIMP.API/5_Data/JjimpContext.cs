@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Model;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace JJIMP.API.Data;
 
@@ -19,32 +20,38 @@ public partial class JjimpContext : DbContext
         builder.Entity<Project>()
             .Property(u => u.CreatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
+            .ValueGeneratedOnAdd()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         builder.Entity<Project>()
             .Property(u => u.UpdatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnAddOrUpdate()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         builder.Entity<Issue>()
             .Property(i => i.CreatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
+            .ValueGeneratedOnAdd()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         builder.Entity<Issue>()
             .Property(i => i.UpdatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnAddOrUpdate()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         builder.Entity<Comment>()
             .Property(c => c.CreatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
+            .ValueGeneratedOnAdd()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         builder.Entity<Comment>()
             .Property(c => c.UpdatedAt)
             .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
+            .ValueGeneratedOnAddOrUpdate()
+            .Metadata.SetBeforeSaveBehavior(PropertySaveBehavior.Ignore);
 
         // Configure relations
         // Many-to-many relationship between User and Project
