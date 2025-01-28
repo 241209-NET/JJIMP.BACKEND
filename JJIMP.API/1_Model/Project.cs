@@ -15,8 +15,6 @@ public class Project
     public List<User> Users { get; set; } = [];
     public List<Issue> Issues { get; set; } = [];
     // Metadata
-    [Timestamp]
     public DateTime CreatedAt { get; set; }
-    [Timestamp]
     public DateTime UpdatedAt { get; set; }
 }

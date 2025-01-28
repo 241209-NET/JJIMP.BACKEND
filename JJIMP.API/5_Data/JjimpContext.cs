@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Model;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace JJIMP.API.Data;
 
@@ -15,37 +16,6 @@ public partial class JjimpContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        // Configure timestamps
-        builder.Entity<Project>()
-            .Property(u => u.CreatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
-
-        builder.Entity<Project>()
-            .Property(u => u.UpdatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
-
-        builder.Entity<Issue>()
-            .Property(i => i.CreatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
-
-        builder.Entity<Issue>()
-            .Property(i => i.UpdatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
-
-        builder.Entity<Comment>()
-            .Property(c => c.CreatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAdd();
-
-        builder.Entity<Comment>()
-            .Property(c => c.UpdatedAt)
-            .HasComputedColumnSql("getutcdate()")
-            .ValueGeneratedOnAddOrUpdate();
-
         // Configure relations
         // Many-to-many relationship between User and Project
         builder.Entity<Project>()

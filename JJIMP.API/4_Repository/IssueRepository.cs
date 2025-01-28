@@ -13,28 +13,81 @@ public class IssueRepository : IIssueRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Issue>> GetIssuesByProjectId(int projectId)
-    {
-        return await _dbContext.Issues.Where(i => i.ProjectId == projectId).ToListAsync();
-    }
-
     public async Task<Issue?> GetIssueById(int id)
     {
-        return await _dbContext.Issues.FindAsync(id);
+        return await _dbContext.Issues
+            .Select(i => new Issue
+            {
+                Id = i.Id,
+                Title = i.Title,
+                Description = i.Description,
+                Deadline = i.Deadline,
+                AssigneeId = i.AssigneeId,
+                Status = i.Status,
+                Assignee = new User
+                {
+                    Id = i.Assignee.Id,
+                    Name = i.Assignee.Name,
+                    Password = null!,
+                    Email = i.Assignee.Email,
+                },
+                CreatedBy = new User
+                {
+                    Id = i.CreatedBy.Id,
+                    Name = i.CreatedBy.Name,
+                    Password = null!,
+                    Email = i.CreatedBy.Email,
+                },
+                ProjectId = i.ProjectId,
+                Comments = i.Comments,
+                CreatedAt = i.CreatedAt,
+                UpdatedAt = i.UpdatedAt,
+            })
+            .FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<Issue> CreateIssue(Issue issue)
     {
-        await _dbContext.Issues.AddAsync(issue);
-        await _dbContext.SaveChangesAsync();
-        return issue;
+        try
+        {
+            issue.CreatedAt = DateTime.Now;
+            await _dbContext.Issues.AddAsync(issue);
+            await _dbContext.SaveChangesAsync();
+            return issue;
+        }
+        catch (Exception)
+        {
+            return null!;
+        }
     }
 
-    public async Task<Issue> UpdateIssue(Issue issue)
+    public async Task<Issue?> UpdateIssue(Issue issueToUpdate)
     {
-        _dbContext.Issues.Update(issue);
+        var issue = await _dbContext.Issues.FindAsync(issueToUpdate.Id);
+        if (issue == null)
+        {
+            return null!;
+        }
+        if (issueToUpdate.Title != null)
+        {
+            issue.Title = issueToUpdate.Title;
+        }
+        if (issueToUpdate.Description != null)
+        {
+            issue.Description = issueToUpdate.Description;
+        }
+        if (issueToUpdate.Deadline != null)
+        {
+            issue.Deadline = issueToUpdate.Deadline;
+        }
+        if (issueToUpdate.AssigneeId != null)
+        {
+            issue.AssigneeId = issueToUpdate.AssigneeId;
+        }
+        issue.UpdatedAt = DateTime.Now;
+        var updatedIssue = _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
-        return issue;
+        return updatedIssue.Entity;
     }
 
     public async Task<Issue?> DeleteIssue(int id)

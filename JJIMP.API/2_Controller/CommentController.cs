@@ -18,22 +18,43 @@ public class CommentController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetComment(int id)
     {
-        var comment = await _commentService.GetCommentById(id);
-        return Ok(comment);
+        try
+        {
+            var comment = await _commentService.GetCommentById(id);
+            return Ok(comment);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
     public async Task<ActionResult> CreateComment(CreateCommentDTO commentDTO)
     {
-        var comment = await _commentService.CreateComment(commentDTO);
-        return Ok(comment);
+        try
+        {
+            var comment = await _commentService.CreateComment(commentDTO);
+            return Ok(comment);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPut]
     public async Task<ActionResult> UpdateComment(UpdateCommentDTO commentDTO)
     {
-        var comment = await _commentService.UpdateComment(commentDTO);
-        return Ok(comment);
+        try
+        {
+            var comment = await _commentService.UpdateComment(commentDTO);
+            return Ok(comment);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}")]

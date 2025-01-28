@@ -15,45 +15,36 @@ public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IConfiguration _configuration;
-    private readonly IProjectService _projectService;
 
-    public UserController(IUserService userService, IConfiguration configuration, IProjectService projectService)
+    public UserController(IUserService userService, IConfiguration configuration)
     {
         _userService = userService;
         _configuration = configuration;
-        _projectService = projectService;
     }
 
-    
-    [HttpGet("id/{id}"), Authorize]
-    public async Task<ActionResult> GetUserById(int id)
-    {
-        var user = await _userService.GetUserById(id);
-        return Ok(user);
-    }
-    [HttpGet("username/{username}"), Authorize]
-    public async Task<ActionResult> GetUserByName(string username)
-    {
-        var user = await _userService.GetUserByName(username);
-        return Ok(user);
-    }
 
-    [HttpGet("{id}/projects")]
-    public async Task<ActionResult> GetUserProjects(int id)
+    [HttpGet("{id}"), Authorize]
+    public async Task<ActionResult> GetUser(int id)
     {
-        var user = await _projectService.GetProjectsByUserId(id);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.GetUserById(id);
+            return Ok(user);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
     [HttpGet]
     public async Task<ActionResult> GetAllUsers()
     {
-        var user = await _userService.GetAllUsers();
-        return Ok(user);
+        var users = await _userService.GetAllUsers();
+        return Ok(users);
     }
     
     // GET: api/User/current - adding for easy token use, decodes here
-    [Authorize]
-    [HttpGet("current")]
+    [HttpGet("current"), Authorize]
     public async Task<IActionResult> GetCurrentUser()
     {
         try
@@ -83,13 +74,6 @@ public class UserController : ControllerBase
                 new { message = "An unexpected error occurred.", details = ex.Message }
             );
         }
-    }
-
-    [HttpGet("{id}/info")]
-    public async Task<ActionResult> GetUserInfo(int id)
-    {
-        var user = await _userService.GetUserInfoById(id);
-        return Ok(user);
     }
 
     [HttpPost]
@@ -144,8 +128,15 @@ public class UserController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateUser(UpdateUserDTO userDTO)
     {
-        var user = await _userService.UpdateUser(userDTO);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.UpdateUser(userDTO);
+            return Ok(user);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}")]
