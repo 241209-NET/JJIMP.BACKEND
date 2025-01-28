@@ -41,10 +41,28 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> UpdateUser(User user)
+    public async Task<User?> UpdateUser(User userToUpdate)
     {
+        var user = await _dbContext.Users.FindAsync(userToUpdate.Id);
+        if (user == null)
+        {
+            return null;
+        }
+        if (userToUpdate.Name != null)
+        {
+            userToUpdate.Name = userToUpdate.Name;
+        }
+        if (userToUpdate.Email != null)
+        {
+            userToUpdate.Email = userToUpdate.Email;
+        }
+        if (userToUpdate.Password != null)
+        {
+            userToUpdate.Password = userToUpdate.Password;
+        }
+        var updatedUser = _dbContext.Users.Update(userToUpdate);
         await _dbContext.SaveChangesAsync();
-        return user;
+        return updatedUser.Entity;
     }
 
     public async Task<User?> DeleteUserById(int userId)

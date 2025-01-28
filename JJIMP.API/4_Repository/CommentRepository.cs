@@ -50,10 +50,22 @@ public class CommentRepository : ICommentRepository
         }
     }
 
-    public async Task<Comment> UpdateComment(Comment comment)
+    public async Task<Comment?> UpdateComment(Comment commentToUpdate)
     {
+        var comment = await _dbContext.Comments.FindAsync(commentToUpdate.Id);
+        if (comment == null)
+        {
+            return null;
+        }
+
+        if (commentToUpdate.Content != null)
+        {
+            comment.Content = commentToUpdate.Content;
+        }
+
+        var updatedComment = _dbContext.Comments.Update(comment);
         await _dbContext.SaveChangesAsync();
-        return comment;
+        return updatedComment.Entity;
     }
 
     public async Task<Comment?> DeleteComment(int commentId)

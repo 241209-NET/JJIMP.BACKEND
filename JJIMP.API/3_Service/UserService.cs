@@ -33,25 +33,14 @@ public class UserService : IUserService
         var createdUser = await _userRepository.CreateUser(user);
         return _mapper.Map<UserOutDTO>(createdUser);
     }
+
     public async Task<UserOutDTO?> UpdateUser(UpdateUserDTO userDTO)
     {
-        var userToUpdate = await _userRepository.GetUserById(userDTO.Id) ?? throw new ArgumentException("User not found");
-        if (userDTO.Name != null)
-        {
-            userToUpdate.Name = userDTO.Name;
-        }
-        if (userDTO.Email != null)
-        {
-            userToUpdate.Email = userDTO.Email;
-        }
-        if (userDTO.Password != null)
-        {
-            userToUpdate.Password = userDTO.Password;
-        }
-        var updatedUser = await _userRepository.UpdateUser(userToUpdate);
-        return _mapper.Map<UserOutDTO?>(updatedUser);
-
+        var userToUpdate = _mapper.Map<User>(userDTO);
+        var updatedUser = await _userRepository.UpdateUser(userToUpdate) ?? throw new ArgumentException("User not found");
+        return _mapper.Map<UserOutDTO>(updatedUser);
     }
+
     public async Task<UserOutDTO?> DeleteUserById(int userId)
     {
         var deletedUser = await _userRepository.DeleteUserById(userId);

@@ -60,10 +60,32 @@ public class IssueRepository : IIssueRepository
         }
     }
 
-    public async Task<Issue> UpdateIssue(Issue issue)
+    public async Task<Issue?> UpdateIssue(Issue issueToUpdate)
     {
+        var issue = await _dbContext.Issues.FindAsync(issueToUpdate.Id);
+        if (issue == null)
+        {
+            return null!;
+        }
+        if (issueToUpdate.Title != null)
+        {
+            issueToUpdate.Title = issueToUpdate.Title;
+        }
+        if (issueToUpdate.Description != null)
+        {
+            issueToUpdate.Description = issueToUpdate.Description;
+        }
+        if (issueToUpdate.Deadline != null)
+        {
+            issueToUpdate.Deadline = issueToUpdate.Deadline;
+        }
+        if (issueToUpdate.AssigneeId != null)
+        {
+            issueToUpdate.AssigneeId = issueToUpdate.AssigneeId;
+        }
+        var updatedIssue = _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
-        return issue;
+        return updatedIssue.Entity;
     }
 
     public async Task<Issue?> DeleteIssue(int id)

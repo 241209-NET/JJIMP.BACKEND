@@ -59,10 +59,29 @@ public class ProjectRepository : IProjectRepository
         return project;
     }
 
-    public async Task<Project> UpdateProject(Project project)
+    public async Task<Project?> UpdateProject(Project projectToUpdate)
     {
+        var project = await _dbContext.Projects.FindAsync(projectToUpdate.Id);
+        if (project == null)
+        {
+            return null;
+        }
+        if (projectToUpdate.Name != null)
+        {
+            project.Name = projectToUpdate.Name;
+        }
+        if (projectToUpdate.Description != null)
+        {
+            project.Description = projectToUpdate.Description;
+        }
+        if (projectToUpdate.ProjectManagerId != 0)
+        {
+            var user = await _dbContext.Users.FindAsync(projectToUpdate.ProjectManagerId) ?? throw new ArgumentException("User not found");
+            project.ProjectManager = user;
+        }
+        var updatedProject = _dbContext.Projects.Update(project);
         await _dbContext.SaveChangesAsync();
-        return project;
+        return updatedProject.Entity;
     }
 
     public async Task<Project?> DeleteProject(int projectId)

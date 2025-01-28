@@ -31,28 +31,8 @@ public class IssueService : IIssueService
 
     public async Task<IssueOutDTO> UpdateIssue(UpdateIssueDTO issueDTO)
     {
-        var issue = _mapper.Map<Issue>(issueDTO);
-        var issueToUpdate = await _issueRepository.GetIssueById(issue.Id) ?? throw new ArgumentException("Issue not found");
-        // Assign the new values to the issueToUpdate
-        if (issue.Title != null)
-        {
-            issueToUpdate.Title = issue.Title;
-        }
-        if (issue.Description != null)
-        {
-            issueToUpdate.Description = issue.Description;
-        }
-        if (issue.Deadline != null)
-        {
-            issueToUpdate.Deadline = issue.Deadline;
-        }
-        if (issue.AssigneeId != null)
-        {
-            issueToUpdate.AssigneeId = issue.AssigneeId;
-        }
-        issueToUpdate.Status = issue.Status;
-        // Update the issue
-        var updatedIssue = await _issueRepository.UpdateIssue(issueToUpdate);
+        var issueToUpdate = _mapper.Map<Issue>(issueDTO);
+        var updatedIssue = await _issueRepository.UpdateIssue(issueToUpdate) ?? throw new ArgumentException("Issue not found");
         return _mapper.Map<IssueOutDTO>(updatedIssue);
     }
 

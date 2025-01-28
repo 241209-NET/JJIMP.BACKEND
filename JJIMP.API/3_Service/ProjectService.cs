@@ -31,22 +31,8 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDTO)
     {
-        var projectToUpdate = await _projectRepository.GetProjectById(projectDTO.Id) ?? throw new ArgumentException("Project not found");
-        _mapper.Map(projectDTO, projectToUpdate);
-        // Assign the new values to the projectToUpdate
-        if (projectDTO.Name != null)
-        {
-            projectToUpdate.Name = projectDTO.Name;
-        }
-        if (projectDTO.Description != null)
-        {
-            projectToUpdate.Description = projectDTO.Description;
-        }
-        if (projectDTO.ProjectManagerId != null)
-        {
-            projectToUpdate.ProjectManagerId = (int)projectDTO.ProjectManagerId;
-        }
-        var updatedProject = await _projectRepository.UpdateProject(projectToUpdate);
+        var projectToUpdate = _mapper.Map<Project>(projectDTO);
+        var updatedProject = await _projectRepository.UpdateProject(projectToUpdate) ?? throw new ArgumentException("Project not found");
         return _mapper.Map<ProjectOutDTO>(updatedProject);
     }
 
