@@ -48,9 +48,16 @@ public class IssueRepository : IIssueRepository
 
     public async Task<Issue> CreateIssue(Issue issue)
     {
-        await _dbContext.Issues.AddAsync(issue);
-        await _dbContext.SaveChangesAsync();
-        return issue;
+        try
+        {
+            await _dbContext.Issues.AddAsync(issue);
+            await _dbContext.SaveChangesAsync();
+            return issue;
+        }
+        catch (Exception)
+        {
+            return null!;
+        }
     }
 
     public async Task<Issue> UpdateIssue(Issue issue)

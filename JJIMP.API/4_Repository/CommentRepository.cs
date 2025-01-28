@@ -37,10 +37,17 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> CreateComment(Comment comment)
     {
-        await _dbContext.Comments.AddAsync(comment);
-        await _dbContext.SaveChangesAsync();
-        var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
-        return createdComment!;
+        try 
+        {
+            await _dbContext.Comments.AddAsync(comment);
+            await _dbContext.SaveChangesAsync();
+            var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
+            return createdComment!;
+        }
+        catch (Exception)
+        {
+            return null!;
+        }
     }
 
     public async Task<Comment> UpdateComment(Comment comment)

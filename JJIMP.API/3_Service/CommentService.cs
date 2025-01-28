@@ -24,7 +24,7 @@ public class CommentService : ICommentService
     public async Task<CommentOutDTO> CreateComment(CreateCommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
-        var createdComment = await _commentRepository.CreateComment(comment);
+        var createdComment = await _commentRepository.CreateComment(comment) ?? throw new ArgumentException("Comment not created");
         return _mapper.Map<CommentOutDTO>(createdComment);
     }
 

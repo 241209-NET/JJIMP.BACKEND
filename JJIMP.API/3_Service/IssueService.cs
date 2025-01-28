@@ -25,7 +25,7 @@ public class IssueService : IIssueService
     public async Task<IssueOutDTO> CreateIssue(CreateIssueDTO issueDTO)
     {
         var issue = _mapper.Map<Issue>(issueDTO);
-        var createdIssue = await _issueRepository.CreateIssue(issue);
+        var createdIssue = await _issueRepository.CreateIssue(issue) ?? throw new ArgumentException("Issue not created");
         return _mapper.Map<IssueOutDTO>(createdIssue);
     }
 

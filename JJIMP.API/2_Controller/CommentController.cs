@@ -32,8 +32,15 @@ public class CommentController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateComment(CreateCommentDTO commentDTO)
     {
-        var comment = await _commentService.CreateComment(commentDTO);
-        return Ok(comment);
+        try
+        {
+            var comment = await _commentService.CreateComment(commentDTO);
+            return Ok(comment);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPut]

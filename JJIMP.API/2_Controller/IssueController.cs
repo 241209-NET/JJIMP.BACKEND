@@ -32,8 +32,15 @@ public class IssueController : ControllerBase
     [HttpPost]
     public async Task<ActionResult> CreateIssue(CreateIssueDTO issueDTO)
     {
-        var issue = await _issueService.CreateIssue(issueDTO);
-        return Ok(issue);
+        try
+        {
+            var issue = await _issueService.CreateIssue(issueDTO);
+            return Ok(issue);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPut]
