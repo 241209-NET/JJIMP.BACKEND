@@ -25,6 +25,8 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project> CreateProject(Project project)
     {
+        var user = await _dbContext.Users.FindAsync(project.ProjectManagerId) ?? throw new ArgumentException("User not found");
+        project.Users.Add(user);
         await _dbContext.Projects.AddAsync(project);
         await _dbContext.SaveChangesAsync();
         return project;
