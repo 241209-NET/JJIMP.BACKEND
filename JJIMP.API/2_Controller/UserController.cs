@@ -28,20 +28,20 @@ public class UserController : ControllerBase
     [HttpGet("id/{id}"), Authorize]
     public async Task<ActionResult> GetUserById(int id)
     {
-        var user = await _projectService.GetProjectsByUserId(id);
+        var user = await _userService.GetUserById(id);
         return Ok(user);
     }
     [HttpGet("username/{username}"), Authorize]
-    public async Task<ActionResult> GetUserByName(string name)
+    public async Task<ActionResult> GetUserByName(string username)
     {
-        var user = await _userService.GetUserByName(name);
+        var user = await _userService.GetUserByName(username);
         return Ok(user);
     }
 
     [HttpGet("{id}/projects")]
     public async Task<ActionResult> GetUserProjects(int id)
     {
-        var user = await _userService.GetUserById(id);
+        var user = await _projectService.GetProjectsByUserId(id);
         return Ok(user);
     }
     [HttpGet]
