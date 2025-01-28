@@ -16,7 +16,7 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<IssueOutDTO>> GetIssuesByIssueId(int issueId)
+    public async Task<IEnumerable<IssueOutDTO>> GetIssuesByProjectId(int issueId)
     {
         var issues = await _issueRepository.GetIssuesByProjectId(issueId);
         return _mapper.Map<IEnumerable<IssueOutDTO>>(issues);
