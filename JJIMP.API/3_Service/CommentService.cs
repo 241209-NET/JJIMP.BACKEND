@@ -16,12 +16,6 @@ public class CommentService : ICommentService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<CommentOutDTO>> GetCommentsByIssueId(int issueId)
-    {
-        var comments = await _commentRepository.GetCommentsByIssueId(issueId);
-        return _mapper.Map<IEnumerable<CommentOutDTO>>(comments);
-    }
-
     public async Task<CommentOutDTO> GetCommentById(int commentId)
     {
         var comment = await _commentRepository.GetCommentById(commentId) ?? throw new ArgumentException("Comment not found");

@@ -13,14 +13,26 @@ public class CommentRepository : ICommentRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Comment>> GetCommentsByIssueId(int issueId)
-    {
-        return await _dbContext.Comments.Where(c => c.IssueId == issueId).ToListAsync();
-    }
-
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        return await _dbContext.Comments.FindAsync(commentId);
+        return await _dbContext.Comments
+            .Select(c => new Comment
+            {
+                Id = c.Id,
+                Content = c.Content,
+                PostedById = c.PostedById,
+                PostedBy = new User
+                {
+                    Id = c.PostedBy.Id,
+                    Name = c.PostedBy.Name,
+                    Email = c.PostedBy.Email,
+                    Password = null!,
+                },
+                IssueId = c.IssueId,
+                CreatedAt = c.CreatedAt,
+                UpdatedAt = c.UpdatedAt,
+            })
+            .FirstOrDefaultAsync(c => c.Id == commentId);
     }
 
     public async Task<Comment> CreateComment(Comment comment)

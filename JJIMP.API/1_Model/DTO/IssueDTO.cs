@@ -35,9 +35,7 @@ public class IssueOutDTO
     public string Description { get; set; } = "";
     public StatusEnum Status { get; set; }
     public DateOnly? Deadline { get; set; }
-    public int? AssigneeId { get; set; }
     public User? Assignee { get; set; }
-    public int CreatedById { get; set; }
     public User CreatedBy { get; set; } = null!;
     public int ProjectId { get; set; }
     public List<Comment> Comments { get; set; } = [];
