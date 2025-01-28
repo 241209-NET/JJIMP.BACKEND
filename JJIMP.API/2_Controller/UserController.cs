@@ -25,10 +25,16 @@ public class UserController : ControllerBase
     }
 
     
-    [HttpGet("id/{id}")]
+    [HttpGet("id/{id}"), Authorize]
     public async Task<ActionResult> GetUserById(int id)
     {
         var user = await _projectService.GetProjectsByUserId(id);
+        return Ok(user);
+    }
+    [HttpGet("username/{username}"), Authorize]
+    public async Task<ActionResult> GetUserByName(string name)
+    {
+        var user = await _userService.GetUserByName(name);
         return Ok(user);
     }
 
@@ -36,12 +42,6 @@ public class UserController : ControllerBase
     public async Task<ActionResult> GetUserProjects(int id)
     {
         var user = await _userService.GetUserById(id);
-        return Ok(user);
-    }
-    [HttpGet("username/{username}")]
-    public async Task<ActionResult> GetUserByName(string name)
-    {
-        var user = await _userService.GetUserByName(name);
         return Ok(user);
     }
     [HttpGet]
