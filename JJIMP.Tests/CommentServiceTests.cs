@@ -30,4 +30,121 @@ public class CommentServiceTests
     }
 
 
+    [Fact]
+    public async Task GetCommentById_ShouldReturnCommentDTO()
+    {
+        // Arrange
+        var comment = _fixture.Create<Comment>();
+        var commentDTO = _fixture.Create<CommentOutDTO>();
+        var commentId = _fixture.Create<int>();
+
+        _commentRepositoryMock.Setup(x => x.GetCommentById(It.IsAny<int>())).ReturnsAsync(comment);
+        _mapperMock.Setup(x => x.Map<CommentOutDTO>(It.IsAny<Comment>())).Returns(commentDTO);
+
+        // Act
+        var result = await _commentService.GetCommentById(commentId);
+
+        // Assert
+        Assert.Equal(commentDTO, result);
+    }
+
+    [Fact]
+    public async Task GetCommentById_ShouldThrowIfCommentDoesNotExist()
+    {
+        // Arrange
+        var commentId = _fixture.Create<int>();
+
+        _commentRepositoryMock.Setup(x => x.GetCommentById(It.IsAny<int>())).ReturnsAsync(null as Comment);
+
+        // Act
+        async Task act() => await _commentService.GetCommentById(commentId);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    [Fact]
+    public async Task CreateComment_ShouldReturnCommentDTO()
+    {
+        // Arrange
+        var comment = _fixture.Create<Comment>();
+        var commentDTO = _fixture.Create<CommentOutDTO>();
+        var createCommentDTO = _fixture.Create<CreateCommentDTO>();
+
+        _commentRepositoryMock.Setup(x => x.CreateComment(It.IsAny<Comment>())).ReturnsAsync(comment);
+        _mapperMock.Setup(x => x.Map<CommentOutDTO>(It.IsAny<Comment>())).Returns(commentDTO);
+
+        // Act
+        var result = await _commentService.CreateComment(createCommentDTO);
+
+        // Assert
+        Assert.Equal(commentDTO, result);
+    }
+
+    [Fact]
+    public async Task UpdateComment_ShouldThrowIfCommentNotFound()
+    {
+        // Arrange
+        var updateCommentDTO = _fixture.Create<UpdateCommentDTO>();
+
+        _commentRepositoryMock.Setup(x => x.GetCommentById(It.IsAny<int>())).ReturnsAsync(null as Comment);
+
+        // Act
+        async Task act() => await _commentService.UpdateComment(updateCommentDTO);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    [Fact]
+    public async Task UpdateComment_ShouldReturnCommentDTO()
+    {
+        // Arrange
+        var comment = _fixture.Create<Comment>();
+        var commentDTO = _fixture.Create<CommentOutDTO>();
+        var updateCommentDTO = _fixture.Create<UpdateCommentDTO>();
+
+        _commentRepositoryMock.Setup(x => x.GetCommentById(It.IsAny<int>())).ReturnsAsync(comment);
+        _commentRepositoryMock.Setup(x => x.UpdateComment(It.IsAny<Comment>())).ReturnsAsync(comment);
+        _mapperMock.Setup(x => x.Map<CommentOutDTO>(It.IsAny<Comment>())).Returns(commentDTO);
+
+        // Act
+        var result = await _commentService.UpdateComment(updateCommentDTO);
+
+        // Assert
+        Assert.Equal(commentDTO, result);
+    }
+
+    [Fact]
+    public async Task DeleteComment_ShouldReturnCommentDTO()
+    {
+        // Arrange
+        var comment = _fixture.Create<Comment>();
+        var commentDTO = _fixture.Create<CommentOutDTO>();
+        var commentId = _fixture.Create<int>();
+
+        _commentRepositoryMock.Setup(x => x.DeleteComment(It.IsAny<int>())).ReturnsAsync(comment);
+        _mapperMock.Setup(x => x.Map<CommentOutDTO>(It.IsAny<Comment>())).Returns(commentDTO);
+
+        // Act
+        var result = await _commentService.DeleteComment(commentId);
+
+        // Assert
+        Assert.Equal(commentDTO, result);
+    }
+
+    [Fact]
+    public async Task DeleteComment_ShouldReturnNullIfCommentDoesNotExist()
+    {
+        // Arrange
+        var commentId = _fixture.Create<int>();
+
+        _commentRepositoryMock.Setup(x => x.DeleteComment(It.IsAny<int>())).ReturnsAsync(null as Comment);
+
+        // Act
+        var result = await _commentService.DeleteComment(commentId);
+
+        // Assert
+        Assert.Null(result);
+    }
 }
