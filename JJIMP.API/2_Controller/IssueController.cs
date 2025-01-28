@@ -18,8 +18,15 @@ public class IssueController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetIssue(int id)
     {
-        var issue = await _issueService.GetIssueById(id);
-        return Ok(issue);
+        try
+        {
+            var issue = await _issueService.GetIssueById(id);
+            return Ok(issue);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpPost]
@@ -32,8 +39,15 @@ public class IssueController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateIssue(UpdateIssueDTO issueDTO)
     {
-        var issue = await _issueService.UpdateIssue(issueDTO);
-        return Ok(issue);
+        try
+        {
+            var issue = await _issueService.UpdateIssue(issueDTO);
+            return Ok(issue);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}")]

@@ -18,8 +18,15 @@ public class UserController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult> GetUser(int id)
     {
-        var user = await _userService.GetUserById(id);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.GetUserById(id);
+            return Ok(user);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpGet]
@@ -39,8 +46,15 @@ public class UserController : ControllerBase
     [HttpPut]
     public async Task<ActionResult> UpdateUser(UpdateUserDTO userDTO)
     {
-        var user = await _userService.UpdateUser(userDTO);
-        return Ok(user);
+        try
+        {
+            var user = await _userService.UpdateUser(userDTO);
+            return Ok(user);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}")]

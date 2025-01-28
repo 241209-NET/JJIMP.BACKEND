@@ -58,13 +58,13 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectOutDTO> AddUserToProject(int projectId, int userId)
     {
-        var project = await _projectRepository.AddUserToProject(projectId, userId);
+        var project = await _projectRepository.AddUserToProject(projectId, userId) ?? throw new ArgumentException("Project or user not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
 
     public async Task<ProjectOutDTO> RemoveUserFromProject(int projectId, int userId)
     {
-        var project = await _projectRepository.RemoveUserFromProject(projectId, userId);
+        var project = await _projectRepository.RemoveUserFromProject(projectId, userId) ?? throw new ArgumentException("Project or user not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
 }

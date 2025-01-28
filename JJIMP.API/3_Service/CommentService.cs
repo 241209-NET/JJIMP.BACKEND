@@ -24,7 +24,7 @@ public class CommentService : ICommentService
 
     public async Task<CommentOutDTO> GetCommentById(int commentId)
     {
-        var comment = await _commentRepository.GetCommentById(commentId);
+        var comment = await _commentRepository.GetCommentById(commentId) ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(comment);
     }
     public async Task<CommentOutDTO> CreateComment(CreateCommentDTO commentDTO)

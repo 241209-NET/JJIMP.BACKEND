@@ -18,7 +18,7 @@ public class IssueService : IIssueService
 
     public async Task<IssueOutDTO> GetIssueById(int issueId)
     {
-        var issue = await _issueRepository.GetIssueById(issueId);
+        var issue = await _issueRepository.GetIssueById(issueId) ?? throw new ArgumentException("Issue not found");
         return _mapper.Map<IssueOutDTO>(issue);
     }
     

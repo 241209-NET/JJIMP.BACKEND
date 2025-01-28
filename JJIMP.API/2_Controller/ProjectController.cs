@@ -19,24 +19,45 @@ public class ProjectController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProject(int id)
     {
-        var project = await _projectService.GetProjectById(id);
-        return Ok(project);
+        try
+        {
+            var project = await _projectService.GetProjectById(id);
+            return Ok(project);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // POST: api/Project
     [HttpPost]
     public async Task<IActionResult> CreateProject(CreateProjectDTO projectDto)
     {
-        var createdProject = await _projectService.CreateProject(projectDto);
-        return Ok(createdProject);
+        try
+        {
+            var project = await _projectService.CreateProject(projectDto);
+            return Ok(project);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // PUT: api/Project
     [HttpPut]
     public async Task<IActionResult> UpdateProject(UpdateProjectDTO projectDto)
     {
-        var updatedProject = await _projectService.UpdateProject(projectDto);
-        return Ok(updatedProject);
+        try
+        {
+            var project = await _projectService.UpdateProject(projectDto);
+            return Ok(project);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     // DELETE: api/Project/5
@@ -50,14 +71,28 @@ public class ProjectController : ControllerBase
     [HttpPost("{id}/users/{userId}")]
     public async Task<IActionResult> AddUserToProject(int id, int userId)
     {
-        var project = await _projectService.AddUserToProject(id, userId);
-        return Ok(project);
+        try
+        {
+            var project = await _projectService.AddUserToProject(id, userId);
+            return Ok(project);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 
     [HttpDelete("{id}/users/{userId}")]
     public async Task<IActionResult> RemoveUserFromProject(int id, int userId)
     {
-        var project = await _projectService.RemoveUserFromProject(id, userId);
-        return Ok(project);
+        try
+        {
+            var project = await _projectService.RemoveUserFromProject(id, userId);
+            return Ok(project);
+        }
+        catch (ArgumentException e)
+        {
+            return BadRequest(e.Message);
+        }
     }
 }
