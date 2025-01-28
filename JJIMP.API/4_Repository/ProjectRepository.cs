@@ -16,8 +16,37 @@ public class ProjectRepository : IProjectRepository
     public async Task<Project?> GetProjectById(int projectId)
     {
         return await _dbContext.Projects
-            .Include(p => p.Users)
-            .Include(p => p.Issues)
+            .Select(p => new Project
+            {
+                Id = p.Id,
+                Name = p.Name,
+                Description = p.Description,
+                ProjectManager = new User
+                {
+                    Id = p.ProjectManager.Id,
+                    Name = p.ProjectManager.Name,
+                    Email = p.ProjectManager.Email,
+                    Password = null!,
+                },
+                Users = p.Users.Select(u => new User
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Email = u.Email,
+                    Password = null!,
+                }).ToList(),
+                Issues = p.Issues.Select(i => new Issue
+                {
+                    Id = i.Id,
+                    Title = i.Title,
+                    Description = i.Description,
+                    Status = i.Status,
+                    CreatedAt = i.CreatedAt,
+                    UpdatedAt = i.UpdatedAt,
+                }).ToList(),
+                CreatedAt = p.CreatedAt,
+                UpdatedAt = p.UpdatedAt,
+            })
             .FirstOrDefaultAsync(p => p.Id == projectId);
     }
 

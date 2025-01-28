@@ -13,11 +13,19 @@ public class UserRepository : IUserRepository
     public async Task<User?> GetUserById(int userId)
     {
         return await _dbContext.Users.Include(u => u.CreatedIssues)
-            .Include(u => u.ManagedProjects)
-            .Include(u => u.Projects)
-            .Include(u => u.CreatedIssues)
-            .Include(u => u.AssignedIssues)
-            .Include(u => u.Comments)
+            .Select(u => new User
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Password = null!,
+                Email = u.Email,
+                Projects = u.Projects.Select(p => new Project
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Description = p.Description,
+                }).ToList()
+            })
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
