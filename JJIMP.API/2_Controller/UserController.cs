@@ -17,7 +17,7 @@ public class UserController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly IProjectService _projectService;
 
-    public UserController(IUserService userService, , IConfiguration configuration, IProjectService projectService)
+    public UserController(IUserService userService, IConfiguration configuration, IProjectService projectService)
     {
         _userService = userService;
         _configuration = configuration;
