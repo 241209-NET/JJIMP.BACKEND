@@ -4,7 +4,6 @@ namespace JJIMP.API.Repository;
 
 public interface IProjectRepository
 {
-    Task<IEnumerable<Project>> GetProjectsByUserId(int userId);
     Task<Project?> GetProjectById(int projectId);
     Task<Project> CreateProject(Project project);
     Task<Project> UpdateProject(Project project);

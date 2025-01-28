@@ -13,14 +13,12 @@ public class ProjectRepository : IProjectRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Project>> GetProjectsByUserId(int userId)
-    {
-        return await _dbContext.Projects.Where(p => p.Users.Any(u => u.Id == userId)).ToListAsync();
-    }
-
     public async Task<Project?> GetProjectById(int projectId)
     {
-        return await _dbContext.Projects.FindAsync(projectId);
+        return await _dbContext.Projects
+            .Include(p => p.Users)
+            .Include(p => p.Issues)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
     }
 
     public async Task<Project> CreateProject(Project project)

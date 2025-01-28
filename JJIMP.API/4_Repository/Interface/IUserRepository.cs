@@ -4,7 +4,6 @@ namespace JJIMP.API.Repository;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<User>> GetUsersByProjectId(int projectId);
     Task<User?> GetUserById(int userId);
     Task<IEnumerable<User>> GetAllUsers();
     Task<User> CreateUser(User user);

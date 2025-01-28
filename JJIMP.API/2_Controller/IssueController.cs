@@ -9,12 +9,10 @@ namespace JJIMP.API.Controller;
 public class IssueController : ControllerBase
 {
     private readonly IIssueService _issueService;
-    private readonly ICommentService _commentService;
 
-    public IssueController(IIssueService issueService, ICommentService commentService)
+    public IssueController(IIssueService issueService)
     {
         _issueService = issueService;
-        _commentService = commentService;
     }
 
     [HttpGet("{id}")]
@@ -22,13 +20,6 @@ public class IssueController : ControllerBase
     {
         var issue = await _issueService.GetIssueById(id);
         return Ok(issue);
-    }
-
-    [HttpGet("{id}/comments")]
-    public async Task<ActionResult> GetIssueComments(int id)
-    {
-        var comments = await _commentService.GetCommentsByIssueId(id);
-        return Ok(comments);
     }
 
     [HttpPost]

@@ -1,3 +1,5 @@
+using JJIMP.API.Model;
+
 namespace JJIMP.API.DTO;
 
 public class CreateProjectDTO
@@ -22,6 +24,8 @@ public class ProjectOutDTO
     public required string Name { get; set; }
     public string? Description { get; set; }
     public int ProjectManagerId { get; set; }
+    public List<User> Users { get; set; } = [];
+    public List<Issue> Issues { get; set; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 

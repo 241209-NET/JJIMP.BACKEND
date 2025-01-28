@@ -13,14 +13,9 @@ public class IssueRepository : IIssueRepository
         _dbContext = dbContext;
     }
 
-    public async Task<IEnumerable<Issue>> GetIssuesByProjectId(int projectId)
-    {
-        return await _dbContext.Issues.Where(i => i.ProjectId == projectId).ToListAsync();
-    }
-
     public async Task<Issue?> GetIssueById(int id)
     {
-        return await _dbContext.Issues.FindAsync(id);
+        return await _dbContext.Issues.Include(i => i.Comments).FirstOrDefaultAsync(i => i.Id == id);
     }
 
     public async Task<Issue> CreateIssue(Issue issue)

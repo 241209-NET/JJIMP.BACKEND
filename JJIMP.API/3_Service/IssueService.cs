@@ -16,17 +16,12 @@ public class IssueService : IIssueService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<IssueOutDTO>> GetIssuesByProjectId(int issueId)
-    {
-        var issues = await _issueRepository.GetIssuesByProjectId(issueId);
-        return _mapper.Map<IEnumerable<IssueOutDTO>>(issues);
-    }
-
     public async Task<IssueOutDTO> GetIssueById(int issueId)
     {
         var issue = await _issueRepository.GetIssueById(issueId);
         return _mapper.Map<IssueOutDTO>(issue);
     }
+    
     public async Task<IssueOutDTO> CreateIssue(CreateIssueDTO issueDTO)
     {
         var issue = _mapper.Map<Issue>(issueDTO);

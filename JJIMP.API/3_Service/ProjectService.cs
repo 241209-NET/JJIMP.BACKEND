@@ -16,12 +16,6 @@ public class ProjectService : IProjectService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<ProjectOutDTO>> GetProjectsByUserId(int userId)
-    {
-        var projects = await _projectRepository.GetProjectsByUserId(userId);
-        return _mapper.Map<IEnumerable<ProjectOutDTO>>(projects);
-    }
-
     public async Task<ProjectOutDTO> GetProjectById(int projectId)
     {
         var project = await _projectRepository.GetProjectById(projectId) ?? throw new ArgumentException("Project not found");

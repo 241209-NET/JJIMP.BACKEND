@@ -10,18 +10,14 @@ public class UserRepository : IUserRepository
 
     public UserRepository(JjimpContext dbContext) => _dbContext = dbContext;
 
-    public async Task<IEnumerable<User>> GetUsersByProjectId(int projectId)
-    {
-        return await _dbContext.Users.Where(u => u.Projects.Any(p => p.Id == projectId)).ToListAsync();
-    }
-
     public async Task<User?> GetUserById(int userId)
     {
         return await _dbContext.Users.Include(u => u.CreatedIssues)
+            .Include(u => u.ManagedProjects)
+            .Include(u => u.Projects)
+            .Include(u => u.CreatedIssues)
             .Include(u => u.AssignedIssues)
             .Include(u => u.Comments)
-            .Include(u => u.Projects)
-            .Include(u => u.ManagedProjects)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 

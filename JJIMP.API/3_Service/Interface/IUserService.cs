@@ -5,7 +5,6 @@ namespace JJIMP.API.Service;
 
 public interface IUserService
 {
-    Task<IEnumerable<UserOutDTO>> GetUsersByProjectId(int projectId);
     Task<UserOutDTO?> GetUserById(int userId);
     Task<IEnumerable<UserOutDTO>> GetAllUsers();
     Task<UserOutDTO> CreateUser(CreateUserDTO user);
