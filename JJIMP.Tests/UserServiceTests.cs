@@ -29,5 +29,22 @@ public class UserServiceTests
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
     }
 
+    
+    [Fact]
+    public async Task TestCreateUser_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var createUserDTO = _fixture.Create<CreateUserDTO>();
 
+        _userRepositoryMock.Setup(x => x.CreateUser(It.IsAny<User>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.CreateUser(createUserDTO);
+
+        // Assert
+        Assert.Equal(userDTO, result);
+    }
 }
