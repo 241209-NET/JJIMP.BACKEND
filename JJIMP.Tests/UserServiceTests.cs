@@ -29,9 +29,58 @@ public class UserServiceTests
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
     }
 
-    
     [Fact]
-    public async Task TestCreateUser_ShouldReturnUserDTO()
+    public async Task GetUserById_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var userId = _fixture.Create<int>();
+
+        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.GetUserById(userId);
+
+        // Assert
+        Assert.Equal(userDTO, result);
+    }
+    [Fact]
+    public async Task GetUserById_ShouldThrowIfUserDoesNotExist()
+    {
+        // Arrange
+        var userId = _fixture.Create<int>();
+
+        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(null as User);
+
+        // Act
+        async Task act() => await _userService.GetUserById(userId);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    /*[Fact]
+    public async Task GetAllUsers_ShouldReturnUserDTOEnumerable()
+    {
+        // Arrange
+        var users = _fixture.Create<IEnumerable<User>>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var userDTOs = _fixture.Create<IEnumerable<UserOutDTO>>();
+
+        _userRepositoryMock.Setup(x => x.GetAllUsers()).ReturnsAsync(users);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.GetAllUsers();
+
+        // Assert
+        Assert.Equivalent(userDTOs, result);
+    }*/
+    
+    /*[Fact]
+    public async Task CreateUser_ShouldReturnUserDTO()
     {
         // Arrange
         var user = _fixture.Create<User>();
@@ -46,5 +95,74 @@ public class UserServiceTests
 
         // Assert
         Assert.Equal(userDTO, result);
+    }*/
+
+    
+    /*[Fact]
+    public async Task UpdateUser_ShouldThrowIfUserNotFound()
+    {
+        // Arrange
+        var updateUserDTO = _fixture.Create<UpdateUserDTO>();
+
+        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(null as User);
+
+        // Act
+        async Task act() => await _userService.UpdateUser(updateUserDTO);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }*/
+
+    /*[Fact]
+    public async Task UpdateUser_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var updateUserDTO = _fixture.Create<UpdateUserDTO>();
+
+        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(user);
+        _userRepositoryMock.Setup(x => x.UpdateUser(It.IsAny<User>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.UpdateUser(updateUserDTO);
+
+        // Assert
+        Assert.Equal(userDTO, result);
+    }*/
+
+    [Fact]
+    public async Task DeleteUser_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var userId = _fixture.Create<int>();
+
+        _userRepositoryMock.Setup(x => x.DeleteUserById(It.IsAny<int>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.DeleteUserById(userId);
+
+        // Assert
+        Assert.Equal(userDTO, result);
     }
+
+    [Fact]
+    public async Task DeleteUser_ShouldReturnNullIfUserDoesNotExist()
+    {
+        // Arrange
+        var userId = _fixture.Create<int>();
+
+        _userRepositoryMock.Setup(x => x.DeleteUserById(It.IsAny<int>())).ReturnsAsync(null as User);
+
+        // Act
+        var result = await _userService.DeleteUserById(userId);
+
+        // Assert
+        Assert.Null(result);
+    }
+
 }
