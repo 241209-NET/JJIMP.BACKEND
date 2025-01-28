@@ -1,8 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace JJIMP.API.Model;
 
+[Index(nameof(Email), IsUnique = true)]
 public class User
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
