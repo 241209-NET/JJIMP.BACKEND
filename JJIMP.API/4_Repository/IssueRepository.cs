@@ -103,6 +103,10 @@ public class IssueRepository : IIssueRepository
 
     public async Task<IEnumerable<Issue>> GetAllIssues()
     {
-        return await _dbContext.Issues.Include(i => i.Comments).ToListAsync();
+        return await _dbContext
+            .Issues.Include(i => i.Comments)
+            .Include(i => i.Assignee)
+            .Include(i => i.CreatedBy)
+            .ToListAsync();
     }
 }
