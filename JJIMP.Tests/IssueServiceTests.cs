@@ -146,4 +146,21 @@ public class IssueServiceTests
         // Assert
         Assert.Null(result);
     }
+
+    [Fact]
+    public async Task GetAllIssues_ShouldReturnListOfIssueDTO()
+    {
+        // Arrange
+        var issues = _fixture.CreateMany<Issue>().ToList();
+        var issueDTOs = _fixture.CreateMany<IssueOutDTO>().ToList();
+
+        _issueRepositoryMock.Setup(x => x.GetAllIssues()).ReturnsAsync(issues);
+        _mapperMock.Setup(x => x.Map<IEnumerable<IssueOutDTO>>(It.IsAny<IEnumerable<Issue>>())).Returns(issueDTOs);
+
+        // Act
+        var result = await _issueService.GetAllIssues();
+
+        // Assert
+        Assert.Equal(issueDTOs, result);
+    }
 }
