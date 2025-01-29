@@ -148,25 +148,6 @@ public class ProjectServiceTests
     }
 
     [Fact]
-    public async Task GetAllProjects_ShouldReturnListOfProjectDTO()
-    {
-        // Arrange
-        var projects = _fixture.CreateMany<Project>().ToList();
-        var projectDTOs = _fixture.CreateMany<ProjectOutDTO>().ToList();
-
-        _projectRepositoryMock.Setup(x => x.GetAllProjects()).ReturnsAsync(projects);
-        _mapperMock.Setup(x => x.Map<IEnumerable<ProjectOutDTO>>(It.IsAny<IEnumerable<Project>>())).Returns(projectDTOs);
-
-        // Act
-        var result = await _projectService.GetAllProjects();
-
-        // Assert
-        Assert.Equal(projectDTOs, result);
-    }
-
-
-
-    [Fact]
     public async Task AddUserToProject_ShouldReturnProjectDTO()
     {
         // Arrange
@@ -200,6 +181,60 @@ public class ProjectServiceTests
 
         // Assert
         await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    [Fact]
+    public async Task RemoveUserFromProject_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var projectId = _fixture.Create<int>();
+        var userId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.RemoveUserFromProject(It.IsAny<int>(),It.IsAny<int>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.RemoveUserFromProject(projectId,userId);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+    
+    [Fact]
+    public async Task RemoveUserFromProject_ShouldThrowIfProjectNotFound()
+    {
+        // Arrange
+        var updateProjectDTO = _fixture.Create<UpdateProjectDTO>();
+        var projectId = _fixture.Create<int>();
+        var userId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(null as Project);
+
+        // Act
+        async Task act() => await _projectService.RemoveUserFromProject(projectId,userId);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    
+    [Fact]
+    public async Task GetAllProjects_ShouldReturnListOfProjectDTO()
+    {
+        // Arrange
+        var projects = _fixture.CreateMany<Project>().ToList();
+        var projectDTOs = _fixture.CreateMany<ProjectOutDTO>().ToList();
+
+        _projectRepositoryMock.Setup(x => x.GetAllProjects()).ReturnsAsync(projects);
+        _mapperMock.Setup(x => x.Map<IEnumerable<ProjectOutDTO>>(It.IsAny<IEnumerable<Project>>())).Returns(projectDTOs);
+
+        // Act
+        var result = await _projectService.GetAllProjects();
+
+        // Assert
+        Assert.Equal(projectDTOs, result);
     }
 
 }
