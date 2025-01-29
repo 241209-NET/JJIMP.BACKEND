@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using JJIMP.API.DTO;
 using JJIMP.API.Service;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JJIMP.API.Controller;
 
@@ -13,6 +13,14 @@ public class ProjectController : ControllerBase
     public ProjectController(IProjectService projectService)
     {
         _projectService = projectService;
+    }
+
+    // GET: api/Project
+    [HttpGet]
+    public async Task<ActionResult> GetAllProjects()
+    {
+        var projects = await _projectService.GetAllProjects();
+        return Ok(projects);
     }
 
     // GET: api/Project/5

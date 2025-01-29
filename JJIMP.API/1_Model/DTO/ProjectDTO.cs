@@ -16,6 +16,7 @@ public class UpdateProjectDTO
     public string? Name { get; set; }
     public string? Description { get; set; }
     public int? ProjectManagerId { get; set; }
+    public List<int>? UserIds { get; set; }
 }
 
 public class ProjectOutDTO

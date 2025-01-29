@@ -11,8 +11,10 @@ public class CreateIssueDTO
     public StatusEnum Status { get; set; } = StatusEnum.Active;
     public DateOnly? Deadline { get; set; }
     public int? AssigneeId { get; set; }
+
     [Required]
     public required int CreatedById { get; set; }
+
     [Required]
     public required int ProjectId { get; set; }
 }

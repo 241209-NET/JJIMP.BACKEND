@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
 using JJIMP.API.DTO;
 using JJIMP.API.Service;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace JJIMP.API.Controller;
 
@@ -22,7 +22,6 @@ public class UserController : ControllerBase
         _configuration = configuration;
     }
 
-
     [HttpGet("{id}"), Authorize]
     public async Task<ActionResult> GetUser(int id)
     {
@@ -36,13 +35,14 @@ public class UserController : ControllerBase
             return BadRequest(e.Message);
         }
     }
+
     [HttpGet]
     public async Task<ActionResult> GetAllUsers()
     {
         var users = await _userService.GetAllUsers();
         return Ok(users);
     }
-    
+
     // GET: api/User/current - adding for easy token use, decodes here
     [HttpGet("current"), Authorize]
     public async Task<IActionResult> GetCurrentUser()
@@ -82,6 +82,7 @@ public class UserController : ControllerBase
         var user = await _userService.CreateUser(userDTO);
         return Ok(user);
     }
+
     // POST: api/User/login
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] CreateUserDTO userDto)
@@ -145,5 +146,4 @@ public class UserController : ControllerBase
         var user = await _userService.DeleteUserById(id);
         return Ok(user);
     }
-
 }

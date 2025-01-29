@@ -7,8 +7,10 @@ public class CreateCommentDTO
 {
     [Required]
     public required string Content { get; set; }
+
     [Required]
     public required int PostedById { get; set; }
+
     [Required]
     public required int IssueId { get; set; }
 }
@@ -17,6 +19,7 @@ public class UpdateCommentDTO
 {
     [Required]
     public int Id { get; set; }
+
     [Required]
     public required string Content { get; set; }
 }
