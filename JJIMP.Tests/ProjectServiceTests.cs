@@ -29,5 +29,140 @@ public class ProjectServiceTests
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
     }
 
+    [Fact]
+    public async Task GetProjectById_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var projectId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.GetProjectById(projectId);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+
+    [Fact]
+    public async Task GetProjectById_ShouldThrowIfProjectDoesNotExist()
+    {
+        // Arrange
+        var projectId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(null as Project);
+
+        // Act
+        async Task act() => await _projectService.GetProjectById(projectId);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    [Fact]
+    public async Task CreateProject_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var createProjectDTO = _fixture.Create<CreateProjectDTO>();
+
+        _projectRepositoryMock.Setup(x => x.CreateProject(It.IsAny<Project>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.CreateProject(createProjectDTO);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+
+    [Fact]
+    public async Task UpdateProject_ShouldThrowIfProjectNotFound()
+    {
+        // Arrange
+        var updateProjectDTO = _fixture.Create<UpdateProjectDTO>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(null as Project);
+
+        // Act
+        async Task act() => await _projectService.UpdateProject(updateProjectDTO);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+    [Fact]
+    public async Task UpdateProject_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var updateProjectDTO = _fixture.Create<UpdateProjectDTO>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(project);
+        _projectRepositoryMock.Setup(x => x.UpdateProject(It.IsAny<Project>(),It.IsAny<List<int>>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.UpdateProject(updateProjectDTO);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+
+    [Fact]
+    public async Task DeleteProject_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var projectId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.DeleteProject(It.IsAny<int>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.DeleteProject(projectId);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+
+    [Fact]
+    public async Task DeleteProject_ShouldReturnNullIfProjectDoesNotExist()
+    {
+        // Arrange
+        var projectId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.DeleteProject(It.IsAny<int>())).ReturnsAsync(null as Project);
+
+        // Act
+        var result = await _projectService.DeleteProject(projectId);
+
+        // Assert
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task GetAllProjects_ShouldReturnListOfProjectDTO()
+    {
+        // Arrange
+        var projects = _fixture.CreateMany<Project>().ToList();
+        var projectDTOs = _fixture.CreateMany<ProjectOutDTO>().ToList();
+
+        _projectRepositoryMock.Setup(x => x.GetAllProjects()).ReturnsAsync(projects);
+        _mapperMock.Setup(x => x.Map<IEnumerable<ProjectOutDTO>>(It.IsAny<IEnumerable<Project>>())).Returns(projectDTOs);
+
+        // Act
+        var result = await _projectService.GetAllProjects();
+
+        // Assert
+        Assert.Equal(projectDTOs, result);
+    }
+
 
 }
