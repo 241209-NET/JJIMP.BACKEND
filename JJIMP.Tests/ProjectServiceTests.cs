@@ -165,4 +165,41 @@ public class ProjectServiceTests
     }
 
 
+
+    [Fact]
+    public async Task AddUserToProject_ShouldReturnProjectDTO()
+    {
+        // Arrange
+        var project = _fixture.Create<Project>();
+        var projectDTO = _fixture.Create<ProjectOutDTO>();
+        var projectId = _fixture.Create<int>();
+        var userId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.AddUserToProject(It.IsAny<int>(),It.IsAny<int>())).ReturnsAsync(project);
+        _mapperMock.Setup(x => x.Map<ProjectOutDTO>(It.IsAny<Project>())).Returns(projectDTO);
+
+        // Act
+        var result = await _projectService.AddUserToProject(projectId,userId);
+
+        // Assert
+        Assert.Equal(projectDTO, result);
+    }
+    
+    [Fact]
+    public async Task AddUserToProject_ShouldThrowIfProjectNotFound()
+    {
+        // Arrange
+        var updateProjectDTO = _fixture.Create<UpdateProjectDTO>();
+        var projectId = _fixture.Create<int>();
+        var userId = _fixture.Create<int>();
+
+        _projectRepositoryMock.Setup(x => x.GetProjectById(It.IsAny<int>())).ReturnsAsync(null as Project);
+
+        // Act
+        async Task act() => await _projectService.AddUserToProject(projectId,userId);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
 }
