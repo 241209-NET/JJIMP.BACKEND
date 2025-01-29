@@ -43,7 +43,12 @@ public class CommentRepository : ICommentRepository
             comment.UpdatedAt = DateTime.Now;
             await _dbContext.Comments.AddAsync(comment);
             await _dbContext.SaveChangesAsync();
-            var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
+
+            // Refetching the comment with PostedBy included so it doesn't break the front end
+            var createdComment = await _dbContext
+                .Comments.Include(c => c.PostedBy)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
             return createdComment!;
         }
         catch (Exception)
