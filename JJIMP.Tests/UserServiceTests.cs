@@ -78,7 +78,7 @@ public class UserServiceTests
         Assert.Equal(userDTOs, result);
     }
     
-    /*[Fact]
+    [Fact]
     public async Task CreateUser_ShouldReturnUserDTO()
     {
         // Arrange
@@ -87,6 +87,7 @@ public class UserServiceTests
         var createUserDTO = _fixture.Create<CreateUserDTO>();
 
         _userRepositoryMock.Setup(x => x.CreateUser(It.IsAny<User>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<User>(It.IsAny<CreateUserDTO>())).Returns(user);
         _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
 
         // Act
@@ -94,25 +95,9 @@ public class UserServiceTests
 
         // Assert
         Assert.Equal(userDTO, result);
-    }*/
+    }
 
-    
-    /*[Fact]
-    public async Task UpdateUser_ShouldThrowIfUserNotFound()
-    {
-        // Arrange
-        var updateUserDTO = _fixture.Create<UpdateUserDTO>();
-
-        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(null as User);
-
-        // Act
-        async Task act() => await _userService.UpdateUser(updateUserDTO);
-
-        // Assert
-        await Assert.ThrowsAsync<ArgumentException>(act);
-    }*/
-
-    /*[Fact]
+    [Fact]
     public async Task UpdateUser_ShouldReturnUserDTO()
     {
         // Arrange
@@ -122,6 +107,7 @@ public class UserServiceTests
 
         _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(user);
         _userRepositoryMock.Setup(x => x.UpdateUser(It.IsAny<User>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<User>(It.IsAny<UpdateUserDTO>())).Returns(user);
         _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
 
         // Act
@@ -129,7 +115,23 @@ public class UserServiceTests
 
         // Assert
         Assert.Equal(userDTO, result);
-    }*/
+    }
+    [Fact]
+    public async Task UpdateUser_ShouldThrowIfUserNotFound()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var updateUserDTO = _fixture.Create<UpdateUserDTO>();
+
+        _userRepositoryMock.Setup(x => x.GetUserById(It.IsAny<int>())).ReturnsAsync(null as User);
+        _mapperMock.Setup(x => x.Map<User>(It.IsAny<UpdateUserDTO>())).Returns(user);
+
+        // Act
+        async Task act() => await _userService.UpdateUser(updateUserDTO);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
 
     [Fact]
     public async Task DeleteUser_ShouldReturnUserDTO()
