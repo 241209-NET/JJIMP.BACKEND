@@ -109,14 +109,23 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> DeleteProject(int projectId)
     {
-        var project = await _dbContext.Projects.FindAsync(projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
+
         if (project == null)
         {
             return null;
         }
 
+        //  removing user associations
+        project.Users.Clear();
+        await _dbContext.SaveChangesAsync(); // saving changes before deleting the project
+
+        // delete the project
         _dbContext.Projects.Remove(project);
         await _dbContext.SaveChangesAsync();
+
         return project;
     }
 
