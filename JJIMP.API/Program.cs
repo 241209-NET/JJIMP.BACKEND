@@ -1,18 +1,18 @@
-
+using System.Text;
+using JJIMP.API.Data;
+using JJIMP.API.DTO;
+using JJIMP.API.Repository;
+using JJIMP.API.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using JJIMP.API.Data;
-using JJIMP.API.Service;
-using JJIMP.API.Repository;
-using JJIMP.API.DTO;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add dbcontext and connect it to connection string
 builder.Services.AddDbContext<JjimpContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("JjimpDB")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("JjimpDB"))
+);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -37,12 +37,17 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 // Add Controllers
-builder.Services.AddControllers()
+builder
+    .Services.AddControllers()
     .AddJsonOptions(options =>
     {
-        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.ReferenceHandler = System
+            .Text
+            .Json
+            .Serialization
+            .ReferenceHandler
+            .IgnoreCycles;
     });
-
 
 builder.Services.AddCors(options =>
 {
@@ -51,9 +56,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-                .WithOrigins(
-                    "http://localhost:5173"
-                ) // specify your React dev origin
+                .WithOrigins("http://localhost:5173") // specify your React dev origin
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials(); // allow credentials
@@ -83,7 +86,7 @@ builder
             ),
         };
     });
-    
+
 var app = builder.Build();
 
 // This is a test comment from John
@@ -96,7 +99,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("AllowReactApp");
+app.UseCors("AllowAll");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

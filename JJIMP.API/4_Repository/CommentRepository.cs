@@ -15,8 +15,8 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        return await _dbContext.Comments
-            .Select(c => new Comment
+        return await _dbContext
+            .Comments.Select(c => new Comment
             {
                 Id = c.Id,
                 Content = c.Content,
@@ -37,7 +37,7 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> CreateComment(Comment comment)
     {
-        try 
+        try
         {
             comment.CreatedAt = DateTime.Now;
             comment.UpdatedAt = DateTime.Now;

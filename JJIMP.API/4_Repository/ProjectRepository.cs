@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Data;
 using JJIMP.API.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace JJIMP.API.Repository;
 
@@ -15,8 +15,8 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> GetProjectById(int projectId)
     {
-        return await _dbContext.Projects
-            .Select(p => new Project
+        return await _dbContext
+            .Projects.Select(p => new Project
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -28,22 +28,26 @@ public class ProjectRepository : IProjectRepository
                     Email = p.ProjectManager.Email,
                     Password = null!,
                 },
-                Users = p.Users.Select(u => new User
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Email = u.Email,
-                    Password = null!,
-                }).ToList(),
-                Issues = p.Issues.Select(i => new Issue
-                {
-                    Id = i.Id,
-                    Title = i.Title,
-                    Description = i.Description,
-                    Status = i.Status,
-                    CreatedAt = i.CreatedAt,
-                    UpdatedAt = i.UpdatedAt,
-                }).ToList(),
+                Users = p
+                    .Users.Select(u => new User
+                    {
+                        Id = u.Id,
+                        Name = u.Name,
+                        Email = u.Email,
+                        Password = null!,
+                    })
+                    .ToList(),
+                Issues = p
+                    .Issues.Select(i => new Issue
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        Description = i.Description,
+                        Status = i.Status,
+                        CreatedAt = i.CreatedAt,
+                        UpdatedAt = i.UpdatedAt,
+                    })
+                    .ToList(),
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt,
             })
@@ -52,7 +56,9 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project> CreateProject(Project project)
     {
-        var user = await _dbContext.Users.FindAsync(project.ProjectManagerId) ?? throw new ArgumentException("User not found");
+        var user =
+            await _dbContext.Users.FindAsync(project.ProjectManagerId)
+            ?? throw new ArgumentException("User not found");
         project.Users.Add(user);
         project.CreatedAt = DateTime.Now;
         await _dbContext.Projects.AddAsync(project);
@@ -77,7 +83,9 @@ public class ProjectRepository : IProjectRepository
         }
         if (projectToUpdate.ProjectManagerId != 0)
         {
-            var user = await _dbContext.Users.FindAsync(projectToUpdate.ProjectManagerId) ?? throw new ArgumentException("User not found");
+            var user =
+                await _dbContext.Users.FindAsync(projectToUpdate.ProjectManagerId)
+                ?? throw new ArgumentException("User not found");
             project.ProjectManager = user;
         }
         project.UpdatedAt = DateTime.Now;
@@ -101,7 +109,9 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> AddUserToProject(int projectId, int userId)
     {
-        var project = await _dbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
         var user = await _dbContext.Users.FindAsync(userId);
         if (project == null || user == null)
         {
@@ -115,7 +125,9 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> RemoveUserFromProject(int projectId, int userId)
     {
-        var project = await _dbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
         var user = await _dbContext.Users.FindAsync(userId);
         if (project == null || user == null)
         {

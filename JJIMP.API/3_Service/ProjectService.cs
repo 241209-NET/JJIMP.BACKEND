@@ -18,7 +18,9 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectOutDTO> GetProjectById(int projectId)
     {
-        var project = await _projectRepository.GetProjectById(projectId) ?? throw new ArgumentException("Project not found");
+        var project =
+            await _projectRepository.GetProjectById(projectId)
+            ?? throw new ArgumentException("Project not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
 
@@ -32,7 +34,9 @@ public class ProjectService : IProjectService
     public async Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDTO)
     {
         var projectToUpdate = _mapper.Map<Project>(projectDTO);
-        var updatedProject = await _projectRepository.UpdateProject(projectToUpdate) ?? throw new ArgumentException("Project not found");
+        var updatedProject =
+            await _projectRepository.UpdateProject(projectToUpdate)
+            ?? throw new ArgumentException("Project not found");
         return _mapper.Map<ProjectOutDTO>(updatedProject);
     }
 
@@ -44,13 +48,17 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectOutDTO> AddUserToProject(int projectId, int userId)
     {
-        var project = await _projectRepository.AddUserToProject(projectId, userId) ?? throw new ArgumentException("Project or user not found");
+        var project =
+            await _projectRepository.AddUserToProject(projectId, userId)
+            ?? throw new ArgumentException("Project or user not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
 
     public async Task<ProjectOutDTO> RemoveUserFromProject(int projectId, int userId)
     {
-        var project = await _projectRepository.RemoveUserFromProject(projectId, userId) ?? throw new ArgumentException("Project or user not found");
+        var project =
+            await _projectRepository.RemoveUserFromProject(projectId, userId)
+            ?? throw new ArgumentException("Project or user not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
 }

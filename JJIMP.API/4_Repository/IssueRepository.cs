@@ -15,8 +15,8 @@ public class IssueRepository : IIssueRepository
 
     public async Task<Issue?> GetIssueById(int id)
     {
-        return await _dbContext.Issues
-            .Select(i => new Issue
+        return await _dbContext
+            .Issues.Select(i => new Issue
             {
                 Id = i.Id,
                 Title = i.Title,

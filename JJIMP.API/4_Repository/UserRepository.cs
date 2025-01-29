@@ -12,31 +12,37 @@ public class UserRepository : IUserRepository
 
     public async Task<User?> GetUserById(int userId)
     {
-        return await _dbContext.Users.Include(u => u.CreatedIssues)
+        return await _dbContext
+            .Users.Include(u => u.CreatedIssues)
             .Select(u => new User
             {
                 Id = u.Id,
                 Name = u.Name,
                 Password = null!,
                 Email = u.Email,
-                Projects = u.Projects.Select(p => new Project
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    Description = p.Description,
-                }).ToList()
+                Projects = u
+                    .Projects.Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                    })
+                    .ToList(),
             })
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
+
     public async Task<User?> GetUserByName(string userName)
     {
-        return await _dbContext.Users.Include(u => u.CreatedIssues)
+        return await _dbContext
+            .Users.Include(u => u.CreatedIssues)
             .Include(u => u.AssignedIssues)
             .Include(u => u.Comments)
             .Include(u => u.Projects)
             .Include(u => u.ManagedProjects)
             .FirstOrDefaultAsync(u => u.Name == userName);
     }
+
     public async Task<IEnumerable<User>> GetAllUsers()
     {
         return await _dbContext.Users.ToListAsync();
@@ -84,6 +90,4 @@ public class UserRepository : IUserRepository
         await _dbContext.SaveChangesAsync();
         return user;
     }
-
-
 }
