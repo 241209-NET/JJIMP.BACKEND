@@ -8,4 +8,5 @@ public interface IIssueService
     Task<IssueOutDTO> CreateIssue(CreateIssueDTO issueDTO);
     Task<IssueOutDTO> UpdateIssue(UpdateIssueDTO issueDTO);
     Task<IssueOutDTO> DeleteIssue(int id);
+    Task<IEnumerable<IssueOutDTO>> GetAllIssues();
 }

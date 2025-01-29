@@ -100,4 +100,9 @@ public class IssueRepository : IIssueRepository
         }
         return issue;
     }
+
+    public async Task<IEnumerable<Issue>> GetAllIssues()
+    {
+        return await _dbContext.Issues.Include(i => i.Comments).ToListAsync();
+    }
 }

@@ -29,6 +29,14 @@ public class IssueController : ControllerBase
         }
     }
 
+    // GET: api/Issue
+    [HttpGet]
+    public async Task<ActionResult> GetAllIssues()
+    {
+        var issues = await _issueService.GetAllIssues();
+        return Ok(issues);
+    }
+
     [HttpPost]
     public async Task<ActionResult> CreateIssue(CreateIssueDTO issueDTO)
     {

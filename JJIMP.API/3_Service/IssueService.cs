@@ -47,4 +47,10 @@ public class IssueService : IIssueService
         var deletedIssue = await _issueRepository.DeleteIssue(issueId);
         return _mapper.Map<IssueOutDTO>(deletedIssue);
     }
+
+    public async Task<IEnumerable<IssueOutDTO>> GetAllIssues()
+    {
+        var issues = await _issueRepository.GetAllIssues();
+        return _mapper.Map<IEnumerable<IssueOutDTO>>(issues);
+    }
 }
