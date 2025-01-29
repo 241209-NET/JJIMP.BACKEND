@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using JJIMP.API.DTO;
 using JJIMP.API.Service;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JJIMP.API.Controller;
 
@@ -27,6 +27,14 @@ public class IssueController : ControllerBase
         {
             return BadRequest(e.Message);
         }
+    }
+
+    // GET: api/Issue
+    [HttpGet]
+    public async Task<ActionResult> GetAllIssues()
+    {
+        var issues = await _issueService.GetAllIssues();
+        return Ok(issues);
     }
 
     [HttpPost]

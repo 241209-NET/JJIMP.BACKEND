@@ -15,8 +15,8 @@ public class IssueRepository : IIssueRepository
 
     public async Task<Issue?> GetIssueById(int id)
     {
-        return await _dbContext.Issues
-            .Select(i => new Issue
+        return await _dbContext
+            .Issues.Select(i => new Issue
             {
                 Id = i.Id,
                 Title = i.Title,
@@ -53,7 +53,13 @@ public class IssueRepository : IIssueRepository
             issue.CreatedAt = DateTime.Now;
             await _dbContext.Issues.AddAsync(issue);
             await _dbContext.SaveChangesAsync();
-            return issue;
+
+            //including asignee for frontend
+            var createdIssue = await _dbContext
+                .Issues.Include(i => i.Assignee)
+                .FirstOrDefaultAsync(i => i.Id == issue.Id);
+
+            return createdIssue;
         }
         catch (Exception)
         {
@@ -84,6 +90,7 @@ public class IssueRepository : IIssueRepository
         {
             issue.AssigneeId = issueToUpdate.AssigneeId;
         }
+        issue.Status = issueToUpdate.Status;
         issue.UpdatedAt = DateTime.Now;
         var updatedIssue = _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
@@ -99,5 +106,14 @@ public class IssueRepository : IIssueRepository
             await _dbContext.SaveChangesAsync();
         }
         return issue;
+    }
+
+    public async Task<IEnumerable<Issue>> GetAllIssues()
+    {
+        return await _dbContext
+            .Issues.Include(i => i.Comments)
+            .Include(i => i.Assignee)
+            .Include(i => i.CreatedBy)
+            .ToListAsync();
     }
 }

@@ -9,11 +9,13 @@ public class Project
     public int Id { get; set; }
     public required string Name { get; set; }
     public string? Description { get; set; }
+
     // Relations
     public int ProjectManagerId { get; set; }
     public User ProjectManager { get; set; } = null!;
     public List<User> Users { get; set; } = [];
     public List<Issue> Issues { get; set; } = [];
+
     // Metadata
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }

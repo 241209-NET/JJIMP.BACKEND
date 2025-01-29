@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using JJIMP.API.Data;
 using JJIMP.API.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace JJIMP.API.Repository;
 
@@ -15,8 +15,8 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> GetProjectById(int projectId)
     {
-        return await _dbContext.Projects
-            .Select(p => new Project
+        return await _dbContext
+            .Projects.Select(p => new Project
             {
                 Id = p.Id,
                 Name = p.Name,
@@ -28,22 +28,26 @@ public class ProjectRepository : IProjectRepository
                     Email = p.ProjectManager.Email,
                     Password = null!,
                 },
-                Users = p.Users.Select(u => new User
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Email = u.Email,
-                    Password = null!,
-                }).ToList(),
-                Issues = p.Issues.Select(i => new Issue
-                {
-                    Id = i.Id,
-                    Title = i.Title,
-                    Description = i.Description,
-                    Status = i.Status,
-                    CreatedAt = i.CreatedAt,
-                    UpdatedAt = i.UpdatedAt,
-                }).ToList(),
+                Users = p
+                    .Users.Select(u => new User
+                    {
+                        Id = u.Id,
+                        Name = u.Name,
+                        Email = u.Email,
+                        Password = null!,
+                    })
+                    .ToList(),
+                Issues = p
+                    .Issues.Select(i => new Issue
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        Description = i.Description,
+                        Status = i.Status,
+                        CreatedAt = i.CreatedAt,
+                        UpdatedAt = i.UpdatedAt,
+                    })
+                    .ToList(),
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt,
             })
@@ -52,7 +56,9 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project> CreateProject(Project project)
     {
-        var user = await _dbContext.Users.FindAsync(project.ProjectManagerId) ?? throw new ArgumentException("User not found");
+        var user =
+            await _dbContext.Users.FindAsync(project.ProjectManagerId)
+            ?? throw new ArgumentException("User not found");
         project.Users.Add(user);
         project.CreatedAt = DateTime.Now;
         await _dbContext.Projects.AddAsync(project);
@@ -60,13 +66,17 @@ public class ProjectRepository : IProjectRepository
         return project;
     }
 
-    public async Task<Project?> UpdateProject(Project projectToUpdate)
+    public async Task<Project?> UpdateProject(Project projectToUpdate, List<int>? userIds)
     {
-        var project = await _dbContext.Projects.FindAsync(projectToUpdate.Id);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectToUpdate.Id);
+
         if (project == null)
         {
             return null;
         }
+
         if (projectToUpdate.Name != null)
         {
             project.Name = projectToUpdate.Name;
@@ -77,31 +87,53 @@ public class ProjectRepository : IProjectRepository
         }
         if (projectToUpdate.ProjectManagerId != 0)
         {
-            var user = await _dbContext.Users.FindAsync(projectToUpdate.ProjectManagerId) ?? throw new ArgumentException("User not found");
+            var user =
+                await _dbContext.Users.FindAsync(projectToUpdate.ProjectManagerId)
+                ?? throw new ArgumentException("Project Manager not found");
             project.ProjectManager = user;
         }
-        project.UpdatedAt = DateTime.Now;
-        var updatedProject = _dbContext.Projects.Update(project);
+
+        //  Handle updating assigned users
+        if (userIds != null)
+        {
+            var users = await _dbContext.Users.Where(u => userIds.Contains(u.Id)).ToListAsync();
+
+            project.Users = users; // Update users assigned to project
+        }
+
+        project.UpdatedAt = DateTime.UtcNow;
+        _dbContext.Projects.Update(project);
         await _dbContext.SaveChangesAsync();
-        return updatedProject.Entity;
+        return project;
     }
 
     public async Task<Project?> DeleteProject(int projectId)
     {
-        var project = await _dbContext.Projects.FindAsync(projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
+
         if (project == null)
         {
             return null;
         }
 
+        //  removing user associations
+        project.Users.Clear();
+        await _dbContext.SaveChangesAsync(); // saving changes before deleting the project
+
+        // delete the project
         _dbContext.Projects.Remove(project);
         await _dbContext.SaveChangesAsync();
+
         return project;
     }
 
     public async Task<Project?> AddUserToProject(int projectId, int userId)
     {
-        var project = await _dbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
         var user = await _dbContext.Users.FindAsync(userId);
         if (project == null || user == null)
         {
@@ -115,7 +147,9 @@ public class ProjectRepository : IProjectRepository
 
     public async Task<Project?> RemoveUserFromProject(int projectId, int userId)
     {
-        var project = await _dbContext.Projects.Include(p => p.Users).FirstOrDefaultAsync(p => p.Id == projectId);
+        var project = await _dbContext
+            .Projects.Include(p => p.Users)
+            .FirstOrDefaultAsync(p => p.Id == projectId);
         var user = await _dbContext.Users.FindAsync(userId);
         if (project == null || user == null)
         {
@@ -125,5 +159,13 @@ public class ProjectRepository : IProjectRepository
         project.Users.Remove(user);
         await _dbContext.SaveChangesAsync();
         return project;
+    }
+
+    public async Task<IEnumerable<Project>> GetAllProjects()
+    {
+        return await _dbContext
+            .Projects.Include(p => p.ProjectManager)
+            .Include(p => p.Users)
+            .ToListAsync();
     }
 }

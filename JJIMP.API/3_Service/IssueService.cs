@@ -18,21 +18,27 @@ public class IssueService : IIssueService
 
     public async Task<IssueOutDTO> GetIssueById(int issueId)
     {
-        var issue = await _issueRepository.GetIssueById(issueId) ?? throw new ArgumentException("Issue not found");
+        var issue =
+            await _issueRepository.GetIssueById(issueId)
+            ?? throw new ArgumentException("Issue not found");
         return _mapper.Map<IssueOutDTO>(issue);
     }
-    
+
     public async Task<IssueOutDTO> CreateIssue(CreateIssueDTO issueDTO)
     {
         var issue = _mapper.Map<Issue>(issueDTO);
-        var createdIssue = await _issueRepository.CreateIssue(issue) ?? throw new ArgumentException("Issue not created");
+        var createdIssue =
+            await _issueRepository.CreateIssue(issue)
+            ?? throw new ArgumentException("Issue not created");
         return _mapper.Map<IssueOutDTO>(createdIssue);
     }
 
     public async Task<IssueOutDTO> UpdateIssue(UpdateIssueDTO issueDTO)
     {
         var issueToUpdate = _mapper.Map<Issue>(issueDTO);
-        var updatedIssue = await _issueRepository.UpdateIssue(issueToUpdate) ?? throw new ArgumentException("Issue not found");
+        var updatedIssue =
+            await _issueRepository.UpdateIssue(issueToUpdate)
+            ?? throw new ArgumentException("Issue not found");
         return _mapper.Map<IssueOutDTO>(updatedIssue);
     }
 
@@ -40,5 +46,11 @@ public class IssueService : IIssueService
     {
         var deletedIssue = await _issueRepository.DeleteIssue(issueId);
         return _mapper.Map<IssueOutDTO>(deletedIssue);
+    }
+
+    public async Task<IEnumerable<IssueOutDTO>> GetAllIssues()
+    {
+        var issues = await _issueRepository.GetAllIssues();
+        return _mapper.Map<IEnumerable<IssueOutDTO>>(issues);
     }
 }

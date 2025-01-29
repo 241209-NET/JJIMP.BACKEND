@@ -15,8 +15,8 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment?> GetCommentById(int commentId)
     {
-        return await _dbContext.Comments
-            .Select(c => new Comment
+        return await _dbContext
+            .Comments.Select(c => new Comment
             {
                 Id = c.Id,
                 Content = c.Content,
@@ -37,13 +37,18 @@ public class CommentRepository : ICommentRepository
 
     public async Task<Comment> CreateComment(Comment comment)
     {
-        try 
+        try
         {
             comment.CreatedAt = DateTime.Now;
             comment.UpdatedAt = DateTime.Now;
             await _dbContext.Comments.AddAsync(comment);
             await _dbContext.SaveChangesAsync();
-            var createdComment = await _dbContext.Comments.FindAsync(comment.Id);
+
+            // Refetching the comment with PostedBy included so it doesn't break the front end
+            var createdComment = await _dbContext
+                .Comments.Include(c => c.PostedBy)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
             return createdComment!;
         }
         catch (Exception)

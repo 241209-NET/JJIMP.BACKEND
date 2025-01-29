@@ -18,20 +18,27 @@ public class CommentService : ICommentService
 
     public async Task<CommentOutDTO> GetCommentById(int commentId)
     {
-        var comment = await _commentRepository.GetCommentById(commentId) ?? throw new ArgumentException("Comment not found");
+        var comment =
+            await _commentRepository.GetCommentById(commentId)
+            ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(comment);
     }
+
     public async Task<CommentOutDTO> CreateComment(CreateCommentDTO commentDTO)
     {
         var comment = _mapper.Map<Comment>(commentDTO);
-        var createdComment = await _commentRepository.CreateComment(comment) ?? throw new ArgumentException("Comment not created");
+        var createdComment =
+            await _commentRepository.CreateComment(comment)
+            ?? throw new ArgumentException("Comment not created");
         return _mapper.Map<CommentOutDTO>(createdComment);
     }
 
     public async Task<CommentOutDTO> UpdateComment(UpdateCommentDTO commentDTO)
     {
         var commentToUpdate = _mapper.Map<Comment>(commentDTO);
-        var updatedComment = await _commentRepository.UpdateComment(commentToUpdate) ?? throw new ArgumentException("Comment not found");
+        var updatedComment =
+            await _commentRepository.UpdateComment(commentToUpdate)
+            ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(updatedComment);
     }
 

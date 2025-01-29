@@ -3,11 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JJIMP.API.Model;
 
-public enum StatusEnum {
+public enum StatusEnum
+{
     Inactive,
     Active,
     Review,
-    Complete
+    Complete,
 }
 
 public class Issue
@@ -18,6 +19,7 @@ public class Issue
     public string? Description { get; set; }
     public StatusEnum Status { get; set; }
     public DateOnly? Deadline { get; set; }
+
     // Relations
     public int? AssigneeId { get; set; }
     public User? Assignee { get; set; }
@@ -26,6 +28,7 @@ public class Issue
     public int ProjectId { get; set; }
     public Project Project { get; set; } = null!;
     public List<Comment> Comments { get; set; } = [];
+
     // Metadata
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
