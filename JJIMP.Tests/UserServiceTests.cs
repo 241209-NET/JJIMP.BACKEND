@@ -61,23 +61,22 @@ public class UserServiceTests
         await Assert.ThrowsAsync<ArgumentException>(act);
     }
 
-    /*[Fact]
+    [Fact]
     public async Task GetAllUsers_ShouldReturnUserDTOEnumerable()
     {
         // Arrange
-        var users = _fixture.Create<IEnumerable<User>>();
-        var userDTO = _fixture.Create<UserOutDTO>();
-        var userDTOs = _fixture.Create<IEnumerable<UserOutDTO>>();
+        var users = _fixture.CreateMany<User>().ToList();
+        var userDTOs = _fixture.CreateMany<UserOutDTO>().ToList();
 
         _userRepositoryMock.Setup(x => x.GetAllUsers()).ReturnsAsync(users);
-        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+        _mapperMock.Setup(x => x.Map<IEnumerable<UserOutDTO>>(It.IsAny<IEnumerable<User>>())).Returns(userDTOs);
 
         // Act
         var result = await _userService.GetAllUsers();
 
         // Assert
-        Assert.Equivalent(userDTOs, result);
-    }*/
+        Assert.Equal(userDTOs, result);
+    }
     
     /*[Fact]
     public async Task CreateUser_ShouldReturnUserDTO()
