@@ -53,7 +53,13 @@ public class IssueRepository : IIssueRepository
             issue.CreatedAt = DateTime.Now;
             await _dbContext.Issues.AddAsync(issue);
             await _dbContext.SaveChangesAsync();
-            return issue;
+
+            //including asignee for frontend
+            var createdIssue = await _dbContext
+                .Issues.Include(i => i.Assignee)
+                .FirstOrDefaultAsync(i => i.Id == issue.Id);
+
+            return createdIssue;
         }
         catch (Exception)
         {
