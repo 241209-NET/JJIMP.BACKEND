@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JJIMP_Ticketing.Migrations
 {
     [DbContext(typeof(JjimpContext))]
-    [Migration("20250129002134_latest")]
-    partial class latest
+    [Migration("20250129035305_newestUpdate")]
+    partial class newestUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
