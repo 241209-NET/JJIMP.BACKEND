@@ -15,6 +15,14 @@ public class ProjectController : ControllerBase
         _projectService = projectService;
     }
 
+    // GET: api/Project
+    [HttpGet]
+    public async Task<ActionResult> GetAllProjects()
+    {
+        var projects = await _projectService.GetAllProjects();
+        return Ok(projects);
+    }
+
     // GET: api/Project/5
     [HttpGet("{id}")]
     public async Task<IActionResult> GetProject(int id)

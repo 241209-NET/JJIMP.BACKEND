@@ -45,7 +45,13 @@ public class UserRepository : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllUsers()
     {
-        return await _dbContext.Users.ToListAsync();
+        return await _dbContext
+            .Users.Include(u => u.CreatedIssues)
+            .Include(u => u.AssignedIssues)
+            .Include(u => u.Comments)
+            .Include(u => u.Projects)
+            .Include(u => u.ManagedProjects)
+            .ToListAsync();
     }
 
     public async Task<User> CreateUser(User user)

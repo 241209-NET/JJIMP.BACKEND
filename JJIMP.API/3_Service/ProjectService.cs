@@ -61,4 +61,10 @@ public class ProjectService : IProjectService
             ?? throw new ArgumentException("Project or user not found");
         return _mapper.Map<ProjectOutDTO>(project);
     }
+
+    public async Task<IEnumerable<ProjectOutDTO>> GetAllProjects()
+    {
+        var projects = await _projectRepository.GetAllProjects();
+        return _mapper.Map<IEnumerable<ProjectOutDTO>>(projects);
+    }
 }

@@ -138,4 +138,12 @@ public class ProjectRepository : IProjectRepository
         await _dbContext.SaveChangesAsync();
         return project;
     }
+
+    public async Task<IEnumerable<Project>> GetAllProjects()
+    {
+        return await _dbContext
+            .Projects.Include(p => p.ProjectManager)
+            .Include(p => p.Users)
+            .ToListAsync();
+    }
 }
