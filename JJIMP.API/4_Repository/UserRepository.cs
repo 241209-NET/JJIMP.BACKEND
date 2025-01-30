@@ -51,6 +51,52 @@ public class UserRepository : IUserRepository
             .Include(u => u.Comments)
             .Include(u => u.Projects)
             .Include(u => u.ManagedProjects)
+            .Select(u => new User
+            {
+                Id = u.Id,
+                Name = u.Name,
+                Password = null!,
+                Email = u.Email,
+                Projects = u
+                    .Projects.Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                    })
+                    .ToList(),
+                AssignedIssues = u
+                    .AssignedIssues.Select(i => new Issue
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        Description = i.Description,
+                    })
+                    .ToList(),
+                CreatedIssues = u
+                    .CreatedIssues.Select(i => new Issue
+                    {
+                        Id = i.Id,
+                        Title = i.Title,
+                        Description = i.Description,
+                    })
+                    .ToList(),
+                Comments = u
+                    .Comments.Select(c => new Comment
+                    {
+                        Id = c.Id,
+                        Content = c.Content,
+                    })
+                    .ToList(),
+                ManagedProjects = u
+                    .ManagedProjects.Select(p => new Project
+                    {
+                        Id = p.Id,
+                        Name = p.Name,
+                        Description = p.Description,
+                    })
+                    .ToList(),
+            })
             .ToListAsync();
     }
 
