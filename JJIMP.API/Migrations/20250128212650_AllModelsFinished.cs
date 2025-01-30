@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace JJIMP_Ticketing.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class AllModelsFinished : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
