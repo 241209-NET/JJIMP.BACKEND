@@ -116,6 +116,41 @@ public class UserServiceTests
         // Assert
         Assert.Equal(userDTO, result);
     }
+
+
+    [Fact]
+    public async Task GetUserByName_ShouldReturnUserDTO()
+    {
+        // Arrange
+        var user = _fixture.Create<User>();
+        var userDTO = _fixture.Create<UserOutDTO>();
+        var userName = _fixture.Create<string>();
+
+        _userRepositoryMock.Setup(x => x.GetUserByName(It.IsAny<string>())).ReturnsAsync(user);
+        _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
+
+        // Act
+        var result = await _userService.GetUserByName(userName);
+
+        // Assert
+        Assert.Equal(userDTO, result);
+    }
+    [Fact]
+    public async Task GetUserByName_ShouldThrowIfUserDoesNotExist()
+    {
+        // Arrange
+        var userName = _fixture.Create<string>();
+
+        _userRepositoryMock.Setup(x => x.GetUserByName(It.IsAny<string>())).ReturnsAsync(null as User);
+
+        // Act
+        async Task act() => await _userService.GetUserByName(userName);
+
+        // Assert
+        await Assert.ThrowsAsync<ArgumentException>(act);
+    }
+
+
     [Fact]
     public async Task UpdateUser_ShouldThrowIfUserNotFound()
     {
