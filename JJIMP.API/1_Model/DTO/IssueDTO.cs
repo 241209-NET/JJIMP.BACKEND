@@ -8,7 +8,7 @@ public class CreateIssueDTO
     [Required]
     public required string Title { get; set; }
     public string? Description { get; set; }
-    public StatusEnum Status { get; set; } = StatusEnum.Active;
+    public StatusEnum? Status { get; set; }
     public DateOnly? Deadline { get; set; }
     public int? AssigneeId { get; set; }
 

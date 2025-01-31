@@ -17,7 +17,7 @@ public class Issue
     public int Id { get; set; }
     public required string Title { get; set; }
     public string? Description { get; set; }
-    public StatusEnum Status { get; set; }
+    public StatusEnum? Status { get; set; }
     public DateOnly? Deadline { get; set; }
 
     // Relations

@@ -90,7 +90,10 @@ public class IssueRepository : IIssueRepository
         {
             issue.AssigneeId = issueToUpdate.AssigneeId;
         }
-        issue.Status = issueToUpdate.Status;
+        if (issueToUpdate.Status != null)
+        {
+            issue.Status = issueToUpdate.Status;
+        }
         issue.UpdatedAt = DateTime.Now;
         var updatedIssue = _dbContext.Issues.Update(issue);
         await _dbContext.SaveChangesAsync();
