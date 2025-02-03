@@ -32,7 +32,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
-    public async Task<User?> GetUserByName(string userName)
+    public async Task<User?> GetUserByEmail(string email)
     {
         return await _dbContext
             .Users.Include(u => u.CreatedIssues)
@@ -40,7 +40,7 @@ public class UserRepository : IUserRepository
             .Include(u => u.Comments)
             .Include(u => u.Projects)
             .Include(u => u.ManagedProjects)
-            .FirstOrDefaultAsync(u => u.Name == userName);
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<IEnumerable<User>> GetAllUsers()

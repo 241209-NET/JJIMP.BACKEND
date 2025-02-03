@@ -24,13 +24,14 @@ public class UserService : IUserService
         return _mapper.Map<UserOutDTO?>(user);
     }
 
-    public async Task<UserOutDTO?> GetUserByName(string userName)
+    public async Task<UserOutDTO?> AuthenticateUser(LoginUserDTO userDTO)
     {
-        var user =
-            await _userRepository.GetUserByName(userName)
-            ?? throw new ArgumentException("User not found");
-        ;
-        return _mapper.Map<UserOutDTO?>(user);
+        var user = await _userRepository.GetUserByEmail(userDTO.Email);
+        if (user == null || !BCrypt.Net.BCrypt.Verify(userDTO.Password, user.Password))
+        {
+            return null;
+        }
+        return _mapper.Map<UserOutDTO>(user);
     }
 
     public async Task<IEnumerable<UserOutDTO>> GetAllUsers()

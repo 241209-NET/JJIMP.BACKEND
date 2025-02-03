@@ -85,45 +85,36 @@ public class UserController : ControllerBase
 
     // POST: api/User/login
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] CreateUserDTO userDto)
+    public async Task<IActionResult> Login([FromBody] LoginUserDTO userDto)
     {
-        if (string.IsNullOrWhiteSpace(userDto.Name))
-            return BadRequest("Username cannot be empty.");
-
-        // 1) Look up user by username //Update the GetUserByUsername in Controller with GetUserWithToken
-        var user = await _userService.GetUserByName(userDto.Name)!;
+        // Check for valid credentials
+        var user = await _userService.AuthenticateUser(userDto);
         if (user == null)
-            return NotFound("User not found.");
-
-        // 2) verify password
-        if (!BCrypt.Net.BCrypt.Verify(userDto.Password, user.Password))
         {
-            return Unauthorized("Invalid credentials.");
+            return Unauthorized("Invalid email or password.");
         }
 
-        if (user != null)
+        // Generate JWT token
+        var claims = new[]
         {
-            var claims = new[]
-            {
                 new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]!),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("UserId", user.Id.ToString()),
                 new Claim("Username", user.Name!.ToString()),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
-            var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                _configuration["Jwt:Issuer"],
-                _configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.UtcNow.AddMinutes(60),
-                signingCredentials: signIn
-            );
-            string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
-            return Ok(new { Token = tokenValue, User = user });
-        }
-        return NoContent();
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
+            claims,
+            expires: DateTime.UtcNow.AddMinutes(60),
+            signingCredentials: signIn
+        );
+        string tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return Ok(new { Token = tokenValue, User = user });
     }
 
     [HttpPut]
