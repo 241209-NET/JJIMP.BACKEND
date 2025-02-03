@@ -33,11 +33,11 @@ public class ProjectService : IProjectService
 
     public async Task<ProjectOutDTO> UpdateProject(UpdateProjectDTO projectDTO)
     {
-        var projectToUpdate = _mapper.Map<Project>(projectDTO);
+        var project = _mapper.Map<Project>(projectDTO);
 
         //  Pass UserIds to the repository for updating
         var updatedProject =
-            await _projectRepository.UpdateProject(projectToUpdate, projectDTO.UserIds)
+            await _projectRepository.UpdateProject(project, projectDTO.UserIds)
             ?? throw new ArgumentException("Project not found");
 
         return _mapper.Map<ProjectOutDTO>(updatedProject);

@@ -50,10 +50,10 @@ public class UserService : IUserService
 
     public async Task<UserOutDTO?> UpdateUser(UpdateUserDTO userDTO)
     {
-        var userToUpdate = _mapper.Map<User>(userDTO);
-        userToUpdate.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
+        var user = _mapper.Map<User>(userDTO);
+        user.Password = BCrypt.Net.BCrypt.HashPassword(userDTO.Password);
         var updatedUser =
-            await _userRepository.UpdateUser(userToUpdate)
+            await _userRepository.UpdateUser(user)
             ?? throw new ArgumentException("User not found");
         return _mapper.Map<UserOutDTO>(updatedUser);
     }

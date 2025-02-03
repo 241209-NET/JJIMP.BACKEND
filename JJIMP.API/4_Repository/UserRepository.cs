@@ -50,26 +50,26 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> UpdateUser(User userToUpdate)
+    public async Task<User?> UpdateUser(User user)
     {
-        var user = await _dbContext.Users.FindAsync(userToUpdate.Id);
-        if (user == null)
+        var userToUpdate = await _dbContext.Users.FindAsync(user.Id);
+        if (userToUpdate == null)
         {
             return null;
         }
-        if (userToUpdate.Name != null)
+        if (user.Name != null)
         {
-            userToUpdate.Name = userToUpdate.Name;
+            user.Name = user.Name;
         }
-        if (userToUpdate.Email != null)
+        if (user.Email != null)
         {
-            userToUpdate.Email = userToUpdate.Email;
+            user.Email = user.Email;
         }
-        if (userToUpdate.Password != null)
+        if (user.Password != null)
         {
-            userToUpdate.Password = userToUpdate.Password;
+            user.Password = user.Password;
         }
-        var updatedUser = _dbContext.Users.Update(userToUpdate);
+        var updatedUser = _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
         return updatedUser.Entity;
     }
