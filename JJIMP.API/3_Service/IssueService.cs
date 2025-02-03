@@ -35,9 +35,9 @@ public class IssueService : IIssueService
 
     public async Task<IssueOutDTO> UpdateIssue(UpdateIssueDTO issueDTO)
     {
-        var issueToUpdate = _mapper.Map<Issue>(issueDTO);
+        var issue = _mapper.Map<Issue>(issueDTO);
         var updatedIssue =
-            await _issueRepository.UpdateIssue(issueToUpdate)
+            await _issueRepository.UpdateIssue(issue)
             ?? throw new ArgumentException("Issue not found");
         return _mapper.Map<IssueOutDTO>(updatedIssue);
     }

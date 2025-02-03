@@ -77,7 +77,7 @@ public class UserServiceTests
         // Assert
         Assert.Equal(userDTOs, result);
     }
-    
+
     [Fact]
     public async Task CreateUser_ShouldReturnUserDTO()
     {
@@ -119,35 +119,54 @@ public class UserServiceTests
 
 
     [Fact]
-    public async Task GetUserByName_ShouldReturnUserDTO()
+    public async Task AuthenticateUser_ShouldReturnUserDTOIfCredentialsAreValid()
     {
         // Arrange
         var user = _fixture.Create<User>();
         var userDTO = _fixture.Create<UserOutDTO>();
-        var userName = _fixture.Create<string>();
+        var loginUserDTO = new LoginUserDTO { Email = user.Email, Password = user.Password };
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-        _userRepositoryMock.Setup(x => x.GetUserByName(It.IsAny<string>())).ReturnsAsync(user);
+        _userRepositoryMock.Setup(x => x.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(user);
         _mapperMock.Setup(x => x.Map<UserOutDTO>(It.IsAny<User>())).Returns(userDTO);
 
         // Act
-        var result = await _userService.GetUserByName(userName);
+        var result = await _userService.AuthenticateUser(loginUserDTO);
 
         // Assert
         Assert.Equal(userDTO, result);
     }
+
     [Fact]
-    public async Task GetUserByName_ShouldThrowIfUserDoesNotExist()
+    public async Task AuthenticateUser_ShouldReturnNullIfPasswordIsInvalid()
     {
         // Arrange
-        var userName = _fixture.Create<string>();
+        var user = _fixture.Create<User>();
+        var loginUserDTO = new LoginUserDTO { Email = user.Email, Password = user.Password + "1" };
+        user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
 
-        _userRepositoryMock.Setup(x => x.GetUserByName(It.IsAny<string>())).ReturnsAsync(null as User);
+        _userRepositoryMock.Setup(x => x.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(user);
 
         // Act
-        async Task act() => await _userService.GetUserByName(userName);
+        var result = await _userService.AuthenticateUser(loginUserDTO);
 
         // Assert
-        await Assert.ThrowsAsync<ArgumentException>(act);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public async Task AuthenticateUser_ShouldReturnNullIfUserDoesNotExist()
+    {
+        // Arrange
+        var loginUserDTO = _fixture.Create<LoginUserDTO>();
+
+        _userRepositoryMock.Setup(x => x.GetUserByEmail(It.IsAny<string>())).ReturnsAsync(null as User);
+
+        // Act
+        var result = await _userService.AuthenticateUser(loginUserDTO);
+
+        // Assert
+        Assert.Null(result);
     }
 
 

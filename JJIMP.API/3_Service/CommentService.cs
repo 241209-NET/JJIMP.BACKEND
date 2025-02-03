@@ -35,9 +35,9 @@ public class CommentService : ICommentService
 
     public async Task<CommentOutDTO> UpdateComment(UpdateCommentDTO commentDTO)
     {
-        var commentToUpdate = _mapper.Map<Comment>(commentDTO);
+        var comment = _mapper.Map<Comment>(commentDTO);
         var updatedComment =
-            await _commentRepository.UpdateComment(commentToUpdate)
+            await _commentRepository.UpdateComment(comment)
             ?? throw new ArgumentException("Comment not found");
         return _mapper.Map<CommentOutDTO>(updatedComment);
     }

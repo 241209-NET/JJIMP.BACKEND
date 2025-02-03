@@ -6,7 +6,7 @@ namespace JJIMP.API.Service;
 public interface IUserService
 {
     Task<UserOutDTO?> GetUserById(int userId);
-    Task<UserOutDTO?> GetUserByName(string userName);
+    Task<UserOutDTO?> AuthenticateUser(LoginUserDTO user);
     Task<IEnumerable<UserOutDTO>> GetAllUsers();
     Task<UserOutDTO> CreateUser(CreateUserDTO user);
     Task<UserOutDTO?> UpdateUser(UpdateUserDTO user);

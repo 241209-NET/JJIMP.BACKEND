@@ -37,10 +37,10 @@ public class IssueOutDTO
     public string Description { get; set; } = "";
     public StatusEnum Status { get; set; }
     public DateOnly? Deadline { get; set; }
-    public User? Assignee { get; set; }
-    public User CreatedBy { get; set; } = null!;
+    public PartialUserOutDTO? Assignee { get; set; }
+    public PartialUserOutDTO CreatedBy { get; set; } = null!;
     public int ProjectId { get; set; }
-    public List<Comment> Comments { get; set; } = [];
+    public List<CommentOutDTO> Comments { get; set; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
 }

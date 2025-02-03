@@ -14,25 +14,14 @@ public class UserRepository : IUserRepository
     {
         return await _dbContext
             .Users.Include(u => u.CreatedIssues)
-            .Select(u => new User
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Password = null!,
-                Email = u.Email,
-                Projects = u
-                    .Projects.Select(p => new Project
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                    })
-                    .ToList(),
-            })
+            .Include(u => u.AssignedIssues)
+            .Include(u => u.Comments)
+            .Include(u => u.Projects)
+            .Include(u => u.ManagedProjects)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 
-    public async Task<User?> GetUserByName(string userName)
+    public async Task<User?> GetUserByEmail(string email)
     {
         return await _dbContext
             .Users.Include(u => u.CreatedIssues)
@@ -40,7 +29,7 @@ public class UserRepository : IUserRepository
             .Include(u => u.Comments)
             .Include(u => u.Projects)
             .Include(u => u.ManagedProjects)
-            .FirstOrDefaultAsync(u => u.Name == userName);
+            .FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public async Task<IEnumerable<User>> GetAllUsers()
@@ -107,26 +96,26 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<User?> UpdateUser(User userToUpdate)
+    public async Task<User?> UpdateUser(User user)
     {
-        var user = await _dbContext.Users.FindAsync(userToUpdate.Id);
-        if (user == null)
+        var userToUpdate = await _dbContext.Users.FindAsync(user.Id);
+        if (userToUpdate == null)
         {
             return null;
         }
-        if (userToUpdate.Name != null)
+        if (user.Name != null)
         {
-            userToUpdate.Name = userToUpdate.Name;
+            user.Name = user.Name;
         }
-        if (userToUpdate.Email != null)
+        if (user.Email != null)
         {
-            userToUpdate.Email = userToUpdate.Email;
+            user.Email = user.Email;
         }
-        if (userToUpdate.Password != null)
+        if (user.Password != null)
         {
-            userToUpdate.Password = userToUpdate.Password;
+            user.Password = user.Password;
         }
-        var updatedUser = _dbContext.Users.Update(userToUpdate);
+        var updatedUser = _dbContext.Users.Update(user);
         await _dbContext.SaveChangesAsync();
         return updatedUser.Entity;
     }

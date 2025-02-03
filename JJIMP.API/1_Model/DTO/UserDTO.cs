@@ -19,15 +19,18 @@ public class UpdateUserDTO
 {
     [Required]
     public required int Id { get; set; }
-
-    [Required]
     public string? Name { get; set; }
-
-    [Required]
     public string? Email { get; set; }
+    public string? Password { get; set; }
+}
+
+public class LoginUserDTO
+{
+    [Required]
+    public required string Email { get; set; }
 
     [Required]
-    public string? Password { get; set; }
+    public required string Password { get; set; }
 }
 
 public class UserOutDTO
@@ -35,10 +38,16 @@ public class UserOutDTO
     public int Id { get; set; }
     public required string Name { get; set; }
     public required string Email { get; set; }
-    public required string Password { get; set; }
-    public List<Project> Projects { get; set; } = [];
-    public List<Issue> CreatedIssues { get; set; } = [];
-    public List<Issue> AssignedIssues { get; set; } = [];
-    public List<Comment> Comments { get; set; } = [];
-    public List<Project> ManagedProjects { get; set; } = [];
+    public List<ProjectOutDTO> Projects { get; set; } = [];
+    public List<IssueOutDTO> CreatedIssues { get; set; } = [];
+    public List<IssueOutDTO> AssignedIssues { get; set; } = [];
+    public List<CommentOutDTO> Comments { get; set; } = [];
+    public List<ProjectOutDTO> ManagedProjects { get; set; } = [];
+}
+
+public class PartialUserOutDTO
+{
+    public int Id { get; set; }
+    public required string Name { get; set; }
+    public required string Email { get; set; }
 }
