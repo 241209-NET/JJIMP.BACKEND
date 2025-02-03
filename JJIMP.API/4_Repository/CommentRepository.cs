@@ -16,22 +16,7 @@ public class CommentRepository : ICommentRepository
     public async Task<Comment?> GetCommentById(int commentId)
     {
         return await _dbContext
-            .Comments.Select(c => new Comment
-            {
-                Id = c.Id,
-                Content = c.Content,
-                PostedById = c.PostedById,
-                PostedBy = new User
-                {
-                    Id = c.PostedBy.Id,
-                    Name = c.PostedBy.Name,
-                    Email = c.PostedBy.Email,
-                    Password = null!,
-                },
-                IssueId = c.IssueId,
-                CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt,
-            })
+            .Comments.Include(c => c.PostedBy)
             .FirstOrDefaultAsync(c => c.Id == commentId);
     }
 

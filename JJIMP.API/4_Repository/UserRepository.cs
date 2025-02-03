@@ -14,21 +14,10 @@ public class UserRepository : IUserRepository
     {
         return await _dbContext
             .Users.Include(u => u.CreatedIssues)
-            .Select(u => new User
-            {
-                Id = u.Id,
-                Name = u.Name,
-                Password = null!,
-                Email = u.Email,
-                Projects = u
-                    .Projects.Select(p => new Project
-                    {
-                        Id = p.Id,
-                        Name = p.Name,
-                        Description = p.Description,
-                    })
-                    .ToList(),
-            })
+            .Include(u => u.AssignedIssues)
+            .Include(u => u.Comments)
+            .Include(u => u.Projects)
+            .Include(u => u.ManagedProjects)
             .FirstOrDefaultAsync(u => u.Id == userId);
     }
 

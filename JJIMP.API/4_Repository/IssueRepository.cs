@@ -16,33 +16,9 @@ public class IssueRepository : IIssueRepository
     public async Task<Issue?> GetIssueById(int id)
     {
         return await _dbContext
-            .Issues.Select(i => new Issue
-            {
-                Id = i.Id,
-                Title = i.Title,
-                Description = i.Description,
-                Deadline = i.Deadline,
-                AssigneeId = i.AssigneeId,
-                Status = i.Status,
-                Assignee = new User
-                {
-                    Id = i.Assignee.Id,
-                    Name = i.Assignee.Name,
-                    Password = null!,
-                    Email = i.Assignee.Email,
-                },
-                CreatedBy = new User
-                {
-                    Id = i.CreatedBy.Id,
-                    Name = i.CreatedBy.Name,
-                    Password = null!,
-                    Email = i.CreatedBy.Email,
-                },
-                ProjectId = i.ProjectId,
-                Comments = i.Comments,
-                CreatedAt = i.CreatedAt,
-                UpdatedAt = i.UpdatedAt,
-            })
+            .Issues.Include(i => i.Assignee)
+            .Include(i => i.CreatedBy)
+            .Include(i => i.Comments)
             .FirstOrDefaultAsync(i => i.Id == id);
     }
 
@@ -59,7 +35,7 @@ public class IssueRepository : IIssueRepository
                 .Issues.Include(i => i.Assignee)
                 .FirstOrDefaultAsync(i => i.Id == issue.Id);
 
-            return createdIssue;
+            return createdIssue!;
         }
         catch (Exception)
         {
